@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { FormEvent } from 'react';
-import { emailAtom, firstNameAtom } from '../atoms/features/mailForm';
+import { emailAtom, firstNameAtom } from '../atoms/derived/mailForm';
+
 import { LoadingSpinner } from './LoadingSpinner';
 
 export type MailFormProps = {
