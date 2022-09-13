@@ -23,3 +23,18 @@ export function replaceAtIndex<T>(array: T[], index: number, value: T): T[] {
 export function removeAtIndex<T>(array: T[], index: number): T[] {
   return [...array.slice(0, index), ...array.slice(index + 1)];
 }
+
+export function formDataToUrlParams(formData: FormData) {
+  const data = [...formData.entries()];
+
+  return data
+    .map((entry) => {
+      if (data.filter((x) => x[0] === entry[0]).length > 1) {
+        // doppelt
+        return `${encodeURIComponent(entry[0])}[]=${encodeURIComponent(entry[1] as string)}`;
+      } else {
+        return `${encodeURIComponent(entry[0])}=${encodeURIComponent(entry[1] as string)}`;
+      }
+    })
+    .join('&');
+}

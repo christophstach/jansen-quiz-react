@@ -16,16 +16,16 @@ const categories: Category[] = [
     text: 'Womit willst du dich beschäftigen?',
     parentId: '0',
   },
-  {
-    id: '2',
-    title: 'Gesundheit',
-    parentId: '0',
-  },
-  {
-    id: '3',
-    title: 'Happiness',
-    parentId: '0',
-  },
+  // {
+  //   id: '2',
+  //   title: 'Gesundheit',
+  //   parentId: '0',
+  // },
+  // {
+  //   id: '3',
+  //   title: 'Happiness',
+  //   parentId: '0',
+  // },
 
   {
     id: '1.1',

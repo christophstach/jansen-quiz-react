@@ -13,6 +13,7 @@ import {
   parentCategoryAtom,
   selectedSubCategoryAtom,
 } from '../atoms/derived/categories';
+import { formDataAtom, payloadAtom } from '../atoms/derived/data';
 
 import {
   canGoNextPageAtom,
@@ -29,10 +30,12 @@ import {
   currentQuestionSelectedAnwerIdsAtom,
   isLastQuestionOfCurrentCategoryAtom,
 } from '../atoms/derived/questions';
+import { mailFormAtom } from '../atoms/mailForm';
 
 import { questionsAtom } from '../atoms/questions';
+import { config } from '../config';
 import { PageType } from '../types';
-import { findById, removeAtIndex, replaceAtIndex } from '../utils';
+import { findById, formDataToUrlParams, removeAtIndex, replaceAtIndex } from '../utils';
 import { CategoryPage } from './pages/CategoryPage';
 import { ErrorPage } from './pages/ErrorPage';
 import { FinalizeCategoryPage } from './pages/FinalizeCategoryPage';
@@ -50,9 +53,10 @@ export default function Quiz() {
   const [currentQuestionSelectedAnswerIds, setSelectedAnswerIds] = useAtom(currentQuestionSelectedAnwerIdsAtom);
   const [currentCategoryPage, setCurrentCategoryPage] = useAtom(currentCategoryPageAtom);
   const [parentCategory, setParentCategory] = useAtom(parentCategoryAtom);
-  const [finalizeNextCategory, setFinalizeNextCategory] = useState(finalizeNextCategoryAtom);
   const [nextCategory, setNextCategory] = useAtom(nextCategoryAtom);
   const [currentCategorySelectedSubCategoryId, setCurrentCategorySelectedSubCategoryId] = useAtom(currentCategorySelectedSubCategoryIdAtom);
+  const [mailForm, setMailForm] = useAtom(mailFormAtom);
+
   const selectedSubCategoryCallback = useAtomCallback(useCallback((get) => get(selectedSubCategoryAtom), []));
 
   const pageType = useAtomValue(pageTypeAtom);
@@ -60,12 +64,12 @@ export default function Quiz() {
   const page = useAtomValue(pageAtom);
   const isLastQuestionOfCurrentCategory = useAtomValue(isLastQuestionOfCurrentCategoryAtom);
   const selectedSubCategory = useAtomValue(selectedSubCategoryAtom);
+  const payload = useAtomValue(payloadAtom);
+  const formData = useAtomValue(formDataAtom);
 
   const currentQuestion = useAtomValue(currentQuestionAtom);
   const currentCategoryQuestions = useAtomValue(currentCategoryQuestionsAtom);
   const currentQuestionAnswers = useAtomValue(currentQuestionAnswersAtom);
-  const hasPreviousPage = useAtomValue(hasPreviousPageAtom);
-  const hasNextPage = useAtomValue(hasNextPageAtom);
   const canGoPreviousPage = useAtomValue(canGoPreviousPageAtom);
   const canGoNextPage = useAtomValue(canGoNextPageAtom);
 
@@ -148,10 +152,20 @@ export default function Quiz() {
         break;
 
       case PageType.FinalizeCategory:
-        setCurrentCategoryPage(currentCategoryPage - 1);
-        break;
-
       case PageType.MailForm:
+        if(parentCategory!.finalizedSubCategories && parentCategory!.finalizedSubCategories.length > 1) {
+          setParentCategory({
+            ...parentCategory!,
+            finalizedSubCategories: removeAtIndex(parentCategory!.finalizedSubCategories, parentCategory!.finalizedSubCategories.length - 1)
+          });
+        } else {
+          setParentCategory({
+            ...parentCategory!,
+            finalizedSubCategories: undefined
+          });
+
+          setCurrentCategoryPage(currentCategoryPage - 1);
+        }
         break;
 
       default:
@@ -169,10 +183,29 @@ export default function Quiz() {
       case PageType.SimpleQuestion:
       case PageType.MultipleChoiceQuestion:
         setCurrentCategoryPage(currentCategoryPage! + 1);
+
+        if(isLastQuestionOfCurrentCategory) {
+          setParentCategory({
+            ...parentCategory!,
+            finalizedSubCategories: parentCategory!.finalizedSubCategories
+              ? [...parentCategory!.finalizedSubCategories, currentCategory!.id]
+              : [currentCategory!.id],
+          });
+        }
         break;
 
       case PageType.FinalizeCategory:
-        setCurrentCategoryPage(currentCategoryPage! + 1);
+        if(nextCategory?.hasInterest) {
+          setCurrentCategoryPage(0);
+          setCurrentCategory(nextCategory);
+        } else {
+          setParentCategory({
+            ...parentCategory!,
+            finalizedSubCategories: parentCategory!.finalizedSubCategories
+              ? [...parentCategory!.finalizedSubCategories, nextCategory!.id]
+              : [nextCategory!.id],
+          });
+        }
         break;
 
       case PageType.MailForm:
@@ -210,6 +243,44 @@ export default function Quiz() {
     }
   }
 
+  function handleMailFormSubmit(firstName: string, email: string): void {
+    setLoading(true);
+
+    formData.append('firstName', firstName);
+
+    const recommendationsLink = `${config.recommendationsLinkPrefix}${formDataToUrlParams(formData)}`;
+    const json = JSON.stringify({
+      ...payload,
+      firstName,
+      email,
+      recommendationsLink
+    });
+
+    fetch(config.subscribeUrl, {
+      method: 'POST',
+      body: json,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(() => {
+        setError(false);
+        setLoading(false);
+        setEmailSent(true);
+
+        setCategories(RESET);
+        setQuestions(RESET);
+        setMailForm(RESET);
+
+        window.location.replace(recommendationsLink);
+      })
+      .catch(() => {
+        setLoading(false);
+        setError(true);
+      });
+  }
+
+
   const pageTypes = {
     [PageType.Category]: (
       <CategoryPage
@@ -242,7 +313,7 @@ export default function Quiz() {
         onContinueWithNextCategoryValueChange={handleContinueWithNextCategoryValueChange}
       />
     ),
-    [PageType.MailForm]: <MailFormPage />,
+    [PageType.MailForm]: <MailFormPage onSubmit={handleMailFormSubmit} loading={loading} error={error} />,
     [PageType.Error]: <ErrorPage />,
   };
 
@@ -254,6 +325,8 @@ export default function Quiz() {
 
           <div className="tw-bg-jansen-yellow tw-text-white tw-p-3 -tw-mr-3">Zu 100% für 0 Euro</div>
         </div>
+
+        <div className="tw-hidden">
         currentCategory: <pre className="tw-text-xs">{JSON.stringify(currentCategory, null, 2)}</pre>
         nextCategory: <pre className="tw-text-xs">{JSON.stringify(nextCategory, null, 2)}</pre>
         parentCategory: <pre className="tw-text-xs">{JSON.stringify(parentCategory, null, 2)}</pre>
@@ -266,6 +339,8 @@ export default function Quiz() {
         currentCategoryQuestions:{' '}
         <pre className="tw-text-xs tw-hidden">{JSON.stringify(currentCategoryQuestions, null, 2)}</pre>
         currentQuestion: <pre className="tw-text-xs">{JSON.stringify(currentQuestion, null, 2)}</pre>
+
+        </div>
         {emailSent ? (
           <div className="tw-pb-10 tw-px-10">
             <div className="tw-p-10">

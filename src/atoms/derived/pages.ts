@@ -61,6 +61,8 @@ export const canGoNextPageAtom = atom((get) => {
       return nextCategory?.hasInterest !== undefined;
 
     case PageType.MailForm:
+
+      return false
       break;
 
     default:

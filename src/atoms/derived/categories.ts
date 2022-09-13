@@ -74,7 +74,7 @@ export const currentCategoryPageAtom = atom(
 
     return currentCategory.page ? currentCategory.page : 0;
   },
-  (get, set, value: number) => {
+  (get, set, value: number | undefined) => {
     const categories = get(categoriesAtom);
     const currentCategory = get(currentCategoryAtom);
 
