@@ -3,11 +3,12 @@ import { Category } from '../../types';
 export type CategoryPageProps = {
   category: Category;
   subCategories: Category[];
+  selectedSubCategory?: Category;
   onSubCategorySelected: (subCategoryId: string) => void;
 };
 
 export function CategoryPage(props: CategoryPageProps) {
-  const { category, subCategories, onSubCategorySelected } = props;
+  const { category, subCategories, selectedSubCategory, onSubCategorySelected } = props;
 
   function handleSubCategorySelected(subCategoryId: string) {
     onSubCategorySelected(subCategoryId);
@@ -33,10 +34,12 @@ export function CategoryPage(props: CategoryPageProps) {
         >
           <div className="flex items-center">
             <input
+              readOnly
               name="sub-category"
               type="radio"
               id={`sub-category-${subCategory.id}`}
               value={subCategory.id}
+              checked={subCategory.id === selectedSubCategory?.id}
               onClick={() => handleSubCategorySelected(subCategory.id)}
             />
           </div>

@@ -7,6 +7,7 @@ import { isQuestionValid } from '../helpers';
 import {
   currentCategoryAtom,
   currentCategoryPageAtom,
+  currentCategorySelectedSubCategoryIdAtom,
   hasNextCategoryAtom,
   isLeafCurrentCategoryAtom,
   nextCategoryAtom,
@@ -44,8 +45,30 @@ export const canGoPreviousPageAtom = atom((get) => {
 export const canGoNextPageAtom = atom((get) => {
   const pageType = get(pageTypeAtom);
   const currentQuestion = get(currentQuestionAtom);
+  const currentCategorySelectedSubCategoryId = get(currentCategorySelectedSubCategoryIdAtom);
 
-  if (pageType === PageType.Category) {
+  switch (pageType) {
+    case PageType.Category:
+      return !!currentCategorySelectedSubCategoryId;
+
+    case PageType.SimpleQuestion:
+    case PageType.MultipleChoiceQuestion:
+      return isQuestionValid(currentQuestion!);
+
+    case PageType.FinalizeCategory:
+      const nextCategory = get(nextCategoryAtom);
+
+      return nextCategory?.hasInterest !== undefined;
+
+    case PageType.MailForm:
+      break;
+
+    default:
+      alert('Not a valid PageType!');
+      return false;
+  }
+
+  /*if (pageType === PageType.Category) {
     return true;
   } else if (pageType === PageType.SimpleQuestion || pageType === PageType.MultipleChoiceQuestion) {
     return isQuestionValid(currentQuestion!);
@@ -53,9 +76,7 @@ export const canGoNextPageAtom = atom((get) => {
     const nextCategory = get(nextCategoryAtom);
 
     return nextCategory?.hasInterest !== undefined;
-  }
-
-  return false;
+  }*/
 });
 
 export const pageTypeAtom = atom((get) => {
@@ -81,7 +102,7 @@ export const pageTypeAtom = atom((get) => {
           return PageType.FinalizeCategory;
         }
       } else {
-        return PageType.MAIL_FORM;
+        return PageType.MailForm;
       }
     }
 

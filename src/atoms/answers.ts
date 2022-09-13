@@ -54,7 +54,6 @@ const answers: Answer[] = [
     text: 'Anwort 1.1.3.3',
   },
 
-
   //
 
   {

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { Category } from '../../types';
-import { replaceAtIndex } from '../../utils';
+import { findById, replaceAtIndex } from '../../utils';
 import { categoriesAtom } from '../categories';
 
 export const currentCategoryAtom = atom(
@@ -28,6 +28,24 @@ export const currentCategoryAtom = atom(
         }
       })
     );
+  }
+);
+
+export const currentCategorySelectedSubCategoryIdAtom = atom(
+  (get) => {
+    const currentCategory = get(currentCategoryAtom);
+
+    return currentCategory.selectedSubCategoryId;
+  },
+  (get, set, value: string | undefined) => {
+    const categories = get(categoriesAtom);
+    const currentCategory = get(currentCategoryAtom);
+
+    if (currentCategory) {
+      const index = categories.findIndex((category) => category.id === currentCategory.id);
+
+      set(categoriesAtom, replaceAtIndex(categories, index, { ...currentCategory, selectedSubCategoryId: value }));
+    }
   }
 );
 
@@ -122,3 +140,10 @@ export const parentCategoryAtom = atom(
     set(categoriesAtom, replaceAtIndex(categories, parentIndex, value));
   }
 );
+
+export const selectedSubCategoryAtom = atom((get) => {
+  const categories = get(categoriesAtom);
+  const currentCategorySelectedSubCategoryId = get(currentCategorySelectedSubCategoryIdAtom);
+
+  return findById(categories, currentCategorySelectedSubCategoryId);
+});

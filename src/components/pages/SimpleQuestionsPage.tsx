@@ -30,11 +30,12 @@ export default function SimpleQuestionPage(props: SimpleQuestionPageProps) {
         >
           <div className="flex items-center">
             <input
+              readOnly
               name="simple-answer"
               type="radio"
               id={`simple-answer-${answer.id}`}
               value={answer.id}
-              defaultChecked={answer.id === selectedAnswerId}
+              checked={answer.id === selectedAnswerId}
               onClick={() => onAnswerSelected(answer.id)}
             />
           </div>

@@ -23,11 +23,12 @@ export function FinalizeCategoryPage(props: FinalizeCategoryPageProps) {
       >
         <div className="flex items-center">
           <input
+            readOnly
             type="radio"
             id="finalize-category-yes"
             name="finalize-category"
-            defaultChecked={defaultValue === true}
-            onChange={() => onContinueWithNextCategoryValueChange(true)}
+            checked={defaultValue === true}
+            onClick={() => onContinueWithNextCategoryValueChange(true)}
           />
         </div>
 
@@ -40,11 +41,12 @@ export function FinalizeCategoryPage(props: FinalizeCategoryPageProps) {
       >
         <div className="flex items-center">
           <input
+            readOnly
             type="radio"
             id="finalize-category-no"
             name="finalize-category"
-            defaultChecked={defaultValue === false}
-            onChange={() => onContinueWithNextCategoryValueChange(false)}
+            checked={defaultValue === false}
+            onClick={() => onContinueWithNextCategoryValueChange(false)}
           />
         </div>
 

@@ -44,12 +44,5 @@ const categories: Category[] = [
   },
 ];
 
+
 export const categoriesAtom = atomWithStorage('categoriesAtom', categories);
-
-export const categoriesFamily = atomFamily((id: string) =>
-  atom((get) => get(categoriesAtom).find((category) => category.id === id))
-);
-
-export const subCategoriesFamily = atomFamily((id: string) =>
-  atom((get) => get(categoriesAtom).find((category) => category.parentId === id))
-);

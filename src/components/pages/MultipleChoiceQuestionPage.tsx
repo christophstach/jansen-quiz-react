@@ -42,11 +42,12 @@ export default function MultipleChoiceQuestionPage(props: MultipleChoiceQuestion
         >
           <div className="tw-flex tw-items-center">
             <input
+              readOnly
               name="multiple-choice-answer"
               type="checkbox"
               id={`multiple-choice-answer-${answer.id}`}
               value={answer.id}
-              defaultChecked={selectedAnswerIds?.includes(answer.id)}
+              checked={selectedAnswerIds?.includes(answer.id)}
               onClick={() => handleCheckBoxClick(answer.id)}
             />
           </div>

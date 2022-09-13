@@ -8,6 +8,7 @@ export type Category = {
   page?: number;
   finalizedSubCategories?: string[];
   hasInterest?: boolean;
+  selectedSubCategoryId?: string;
 };
 
 export enum PageType {
@@ -16,7 +17,7 @@ export enum PageType {
   SimpleQuestion = 'SIMPLE_QUESTION',
   MultipleChoiceQuestion = 'MULTIPLE_CHOICE_QUESTION',
   Error = 'ERROR',
-  MAIL_FORM = 'MAIL_FORM',
+  MailForm = 'MAIL_FORM',
 }
 
 export enum QuestionType {
