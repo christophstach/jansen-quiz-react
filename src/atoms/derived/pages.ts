@@ -4,16 +4,22 @@ import { treeDepth } from '../../utils';
 
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
-import { currentCategoryAtom, currentCategoryQuestionIndexAtom, isLeafCurrentCategoryAtom } from './categories';
-import { currentQuestionAtom,  } from './questions';
+import {
+  currentCategoryAtom,
+  currentCategoryPageAtom,
+  hasNextCategoryAtom,
+  isLeafCurrentCategoryAtom,
+  nextCategoryAtom,
+} from './categories';
+import { currentCategoryQuestionsAtom, currentQuestionAtom } from './questions';
 
 export const pageAtom = atom((get) => {
   const currentCategory = get(currentCategoryAtom);
   const categories = get(categoriesAtom);
-  const categoryQuestionIndex = get(currentCategoryQuestionIndexAtom);
+  const currentCategoryPage = get(currentCategoryPageAtom);
 
-  if (categoryQuestionIndex !== undefined) {
-    return treeDepth(categories, currentCategory) + categoryQuestionIndex;
+  if (currentCategoryPage !== undefined) {
+    return treeDepth(categories, currentCategory) + currentCategoryPage;
   }
 
   return treeDepth(categories, currentCategory);
@@ -43,6 +49,10 @@ export const canGoNextPageAtom = atom((get) => {
     return true;
   } else if (pageType === PageType.SimpleQuestion || pageType === PageType.MultipleChoiceQuestion) {
     return isQuestionValid(currentQuestion!);
+  } else if (pageType === PageType.FinalizeCategory) {
+    const nextCategory = get(nextCategoryAtom);
+
+    return nextCategory?.hasInterest !== undefined;
   }
 
   return false;
@@ -59,6 +69,19 @@ export const pageTypeAtom = atom((get) => {
         return PageType.SimpleQuestion;
       } else if (currentQuestion.type === QuestionType.MultipleChoice) {
         return PageType.MultipleChoiceQuestion;
+      }
+    } else {
+      const hasNextCategory = get(hasNextCategoryAtom);
+
+      if (hasNextCategory) {
+        const currentCategoryPage = get(currentCategoryPageAtom);
+        const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
+
+        if (currentCategoryPage === currentCategoryQuestions.length) {
+          return PageType.FinalizeCategory;
+        }
+      } else {
+        return PageType.MAIL_FORM;
       }
     }
 

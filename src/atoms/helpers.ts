@@ -10,7 +10,6 @@ export function isQuestionTouched(question: Question): boolean {
   return false;
 }
 
-
 export function isQuestionValid(question: Question): boolean {
   if (question?.type === QuestionType.Simple) {
     return question.selectedAnswerId !== undefined;

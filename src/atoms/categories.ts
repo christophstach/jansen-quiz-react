@@ -23,7 +23,7 @@ const categories: Category[] = [
   },
   {
     id: '3',
-    title: 'Happyness',
+    title: 'Happiness',
     parentId: '0',
   },
 

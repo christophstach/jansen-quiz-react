@@ -12,7 +12,7 @@ export default function MultipleChoiceQuestionPage(props: MultipleChoiceQuestion
 
   let checkBoxValues: string[] = selectedAnswerIds ? [...selectedAnswerIds] : [];
 
-  function handleCheckBoxClick(value: string) {
+  function handleCheckBoxClick(value: string): void {
     if (!checkBoxValues.includes(value)) {
       checkBoxValues = [...checkBoxValues, value];
     } else {

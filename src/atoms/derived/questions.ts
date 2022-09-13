@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { Question, QuestionType } from '../../types';
 import { replaceAtIndex } from '../../utils';
 import { questionsAtom } from '../questions';
-import { currentCategoryAtom } from './categories';
+import { currentCategoryAtom, currentCategoryPageAtom } from './categories';
 
 export const currentCategoryQuestionsAtom = atom((get) => {
   const currentCategory = get(currentCategoryAtom);
@@ -18,7 +18,7 @@ export const currentQuestionAtom = atom((get) => {
   const currentCategory = get(currentCategoryAtom);
 
   if (currentCategoryQuestions.length > 0) {
-    const index = currentCategory.questionIndex ? currentCategory.questionIndex : 0
+    const index = currentCategory.page ? currentCategory.page : 0;
 
     return currentCategoryQuestions[index];
   } else {
@@ -43,10 +43,7 @@ export const currentQuestionSelectedAnwerIdAtom = atom(
     if (currentQuestion && currentQuestion.type === QuestionType.Simple) {
       const index = questions.findIndex((question) => question.id === currentQuestion.id);
 
-      set(
-        questionsAtom,
-        replaceAtIndex(questions, index, { ...currentQuestion, selectedAnswerId: value } as Question)
-      );
+      set(questionsAtom, replaceAtIndex(questions, index, { ...currentQuestion, selectedAnswerId: value } as Question));
     }
   }
 );
@@ -75,3 +72,10 @@ export const currentQuestionSelectedAnwerIdsAtom = atom(
     }
   }
 );
+
+export const isLastQuestionOfCurrentCategoryAtom = atom((get) => {
+  const currentCategoryPage = get(currentCategoryPageAtom);
+  const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
+
+  return currentCategoryQuestions.length - 1 === currentCategoryPage;
+});
