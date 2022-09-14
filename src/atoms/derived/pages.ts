@@ -30,7 +30,6 @@ export const maxPagesAtom = atom((get) => {
   const currentCategorySiblings = get(currentCategorySiblingsAtom);
   const currentCategoryChildren = categories.filter((category) => category.parentId === currentCategory.id);
 
-
   const categoriesWithInterest = categories.filter((category) => category.hasInterest || category.hasInterest === undefined);
   const categoriesWithInterestIds = categoriesWithInterest.map((category) => category.id);
   const categoriesWithInterestQuestions = questions.filter((question) => categoriesWithInterestIds.includes(question.categoryId))
