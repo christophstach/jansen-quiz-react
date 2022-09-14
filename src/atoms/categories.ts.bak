@@ -4,30 +4,30 @@ import { Category } from '../types';
 const categories: Category[] = [
   {
     id: '0',
-    text: 'Hallo, Andreas hier 👋 Herzlich willkommen im Finanz-Quiz.',
+    text: 'Hallo 👋, herzlich willkommen im Finanz-Quiz.',
     active: true,
   },
 
   {
     id: '1',
     title: 'Start',
-    text: 'Welches dieser Ziele steht bei dir im Fokus?',
+    text: 'Womit willst du dich beschäftigen?',
     parentId: '0',
   },
 
   {
     id: '1.1',
-    title: 'Meine Ausgaben senken',
+    title: 'Sparen',
     parentId: '1',
   },
   {
     id: '1.2',
-    title: 'Mein Vermögen aufbauen',
+    title: 'Absicherung',
     parentId: '1',
   },
   {
     id: '1.3',
-    title: 'Absicherung für mich und meine Familie',
+    title: 'Investieren',
     parentId: '1',
   },
 ];
