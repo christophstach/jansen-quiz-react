@@ -11,20 +11,6 @@ const questions: Question[] = [
 
   {
     categoryId: '1.1',
-    id: '100',
-    text: 'Möchtest du auch einen Blick auf deine Investitionspotenziale werfen?',
-    type: QuestionType.Simple,
-  },
-
-  {
-    categoryId: '1.1',
-    id: '101',
-    text: 'Möchtest du auch einen Blick auf deine Sparpotenziale werfen?',
-    type: QuestionType.Simple,
-  },
-
-  {
-    categoryId: '1.1',
     id: '3',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/09/Verteilung.png',
     text: 'Hast du einen Überblick über deine monatlichen Einnahmen und Ausgaben?',
@@ -210,27 +196,6 @@ const questions: Question[] = [
     categoryId: '1.3',
     id: '29',
     text: 'Wie würdest du am liebsten weiter dein Finanzwissen aufbauen?',
-    type: QuestionType.MultipleChoice,
-  },
-
-  {
-    categoryId: '1.3',
-    id: '100',
-    text: 'Möchtest du auch einen Blick auf deine Investitionspotenziale werfen (empfohlen)?',
-    type: QuestionType.MultipleChoice,
-  },
-
-  {
-    categoryId: '1.3',
-    id: '101',
-    text: 'Möchtest du auch einen Blick auf deine Sparpotenziale werfen (empfohlen)?',
-    type: QuestionType.MultipleChoice,
-  },
-
-  {
-    categoryId: '1.3',
-    id: '102',
-    text: 'Möchtest du auch einen Blick auf deine Absicherungslücken werfen (empfohlen)?',
     type: QuestionType.MultipleChoice,
   },
 ];
