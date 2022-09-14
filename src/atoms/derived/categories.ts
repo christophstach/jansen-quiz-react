@@ -119,12 +119,6 @@ export const hasNextCategoryAtom = atom((get) => {
   return !!nextCategory;
 });
 
-export const finalizeNextCategoryAtom = atom((get) => {
-  const nextCategory = get(nextCategoryAtom);
-
-  console.log(nextCategory);
-});
-
 export const parentCategoryAtom = atom(
   (get) => {
     const categories = get(categoriesAtom);

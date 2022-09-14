@@ -28,9 +28,9 @@ const questions: Question[] = [
     type: QuestionType.Simple,
   },
   {
-    id: '1.2.1',
+    id: '1.2.2',
     categoryId: '1.2',
-    text: 'Absicherung 1.2.1',
+    text: 'Absicherung 1.2.2',
     type: QuestionType.Simple,
   },
 

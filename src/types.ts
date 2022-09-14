@@ -9,6 +9,7 @@ export type Category = {
   finalizedSubCategories?: string[];
   hasInterest?: boolean;
   selectedSubCategoryId?: string;
+  previousCategoryId?: string;
 };
 
 export enum PageType {
@@ -25,15 +26,33 @@ export enum QuestionType {
   MultipleChoice = 'MULTIPLE_CHOICE',
 }
 
-export interface SimpleQuestion {
+export type CategoryPage = {
+  type: PageType.Category;
+  currentCategoryId: string;
+};
+
+export type QuestionPage = {
+  type: PageType.SimpleQuestion | PageType.MultipleChoiceQuestion;
+  currentQuestionId: string;
+};
+
+export type FinalizeCategoryPage = {
+  type: PageType.FinalizeCategory;
+  currentCategoryId: string;
+  nextCategoryId: string;
+};
+
+export type Page = CategoryPage | QuestionPage | FinalizeCategoryPage;
+
+export type SimpleQuestion = {
   id: string;
   icon?: string;
   text: string;
   selectedAnswerId?: string;
   type: QuestionType.Simple;
-}
+};
 
-export interface MultipleChoiceQuestion {
+export type MultipleChoiceQuestion = {
   id: string;
   icon?: string;
   text: string;
@@ -41,7 +60,7 @@ export interface MultipleChoiceQuestion {
   type: QuestionType.MultipleChoice;
   minAnswers?: number;
   maxAnswers?: number;
-}
+};
 
 export type Question = (SimpleQuestion | MultipleChoiceQuestion) & {
   categoryId: string;

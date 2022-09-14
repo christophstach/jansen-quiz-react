@@ -1,45 +1,50 @@
 import { atom } from 'jotai';
 import { PageType, QuestionType } from '../../types';
 import { treeDepth } from '../../utils';
-
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
+import { pagesAtom } from '../pages';
+import { questionsAtom } from '../questions';
 import {
   currentCategoryAtom,
   currentCategoryPageAtom,
   currentCategorySelectedSubCategoryIdAtom,
+  currentCategorySiblingsAtom,
   hasNextCategoryAtom,
   isLeafCurrentCategoryAtom,
   nextCategoryAtom,
+  parentCategoryAtom,
 } from './categories';
 import { currentCategoryQuestionsAtom, currentQuestionAtom } from './questions';
 
 export const pageAtom = atom((get) => {
-  const currentCategory = get(currentCategoryAtom);
+  const pages = get(pagesAtom);
+
+  return pages.length + 1;
+});
+
+export const maxPagesAtom = atom((get) => {
+  const maxTreeDepth = 2;
   const categories = get(categoriesAtom);
-  const currentCategoryPage = get(currentCategoryPageAtom);
+  const questions = get(questionsAtom);
+  const currentCategory = get(currentCategoryAtom);
 
-  if (currentCategoryPage !== undefined) {
-    return treeDepth(categories, currentCategory) + currentCategoryPage;
-  }
+  const currentCategorySiblings = get(currentCategorySiblingsAtom);
+  const currentCategoryChildren = categories.filter((category) => category.parentId === currentCategory.id);
 
-  return treeDepth(categories, currentCategory);
-});
 
-export const hasPreviousPageAtom = atom((get) => {
-  const page = get(pageAtom);
+  const categoriesWithInterest = categories.filter((category) => category.hasInterest || category.hasInterest === undefined);
+  const categoriesWithInterestIds = categoriesWithInterest.map((category) => category.id);
+  const categoriesWithInterestQuestions = questions.filter((question) => categoriesWithInterestIds.includes(question.categoryId))
 
-  return page > 0;
-});
 
-export const hasNextPageAtom = atom((get) => {
-  return true;
+  return maxTreeDepth + currentCategorySiblings.length + categoriesWithInterestQuestions.length + Math.max (currentCategoryChildren.length - 1, 0) + 1;
 });
 
 export const canGoPreviousPageAtom = atom((get) => {
-  const hasPreviousPage = get(hasPreviousPageAtom);
+  const pages = get(pagesAtom);
 
-  return hasPreviousPage;
+  return pages.length > 0;
 });
 
 export const canGoNextPageAtom = atom((get) => {
@@ -61,9 +66,7 @@ export const canGoNextPageAtom = atom((get) => {
       return nextCategory?.hasInterest !== undefined;
 
     case PageType.MailForm:
-
-      return false
-      break;
+      return false;
 
     default:
       alert('Not a valid PageType!');

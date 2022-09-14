@@ -1,6 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 
-
 export default function Rootline() {
   /*const pages = useAtomValue(pagesState);
   const setDepth = useSetAtom(depthAtom);
@@ -44,7 +43,5 @@ export default function Rootline() {
     </nav>
   );
   */
-              return (
-                <div>Die Rootline!</div>
-              );
+  return <div>Die Rootline!</div>;
 }

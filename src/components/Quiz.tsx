@@ -8,21 +8,13 @@ import {
   currentCategoryPageAtom,
   currentCategorySelectedSubCategoryIdAtom,
   currentSubCategoriesAtom,
-  finalizeNextCategoryAtom,
   nextCategoryAtom,
   parentCategoryAtom,
   selectedSubCategoryAtom,
 } from '../atoms/derived/categories';
 import { formDataAtom, payloadAtom } from '../atoms/derived/data';
 
-import {
-  canGoNextPageAtom,
-  canGoPreviousPageAtom,
-  hasNextPageAtom,
-  hasPreviousPageAtom,
-  pageAtom,
-  pageTypeAtom,
-} from '../atoms/derived/pages';
+import { canGoNextPageAtom, canGoPreviousPageAtom, maxPagesAtom, pageAtom, pageTypeAtom } from '../atoms/derived/pages';
 import {
   currentCategoryQuestionsAtom,
   currentQuestionAtom,
@@ -31,6 +23,7 @@ import {
   isLastQuestionOfCurrentCategoryAtom,
 } from '../atoms/derived/questions';
 import { mailFormAtom } from '../atoms/mailForm';
+import { pagesAtom } from '../atoms/pages';
 
 import { questionsAtom } from '../atoms/questions';
 import { config } from '../config';
@@ -54,14 +47,21 @@ export default function Quiz() {
   const [currentCategoryPage, setCurrentCategoryPage] = useAtom(currentCategoryPageAtom);
   const [parentCategory, setParentCategory] = useAtom(parentCategoryAtom);
   const [nextCategory, setNextCategory] = useAtom(nextCategoryAtom);
-  const [currentCategorySelectedSubCategoryId, setCurrentCategorySelectedSubCategoryId] = useAtom(currentCategorySelectedSubCategoryIdAtom);
+  const [currentCategorySelectedSubCategoryId, setCurrentCategorySelectedSubCategoryId] = useAtom(
+    currentCategorySelectedSubCategoryIdAtom
+  );
   const [mailForm, setMailForm] = useAtom(mailFormAtom);
+  const [pages, setPages] = useAtom(pagesAtom);
 
   const selectedSubCategoryCallback = useAtomCallback(useCallback((get) => get(selectedSubCategoryAtom), []));
+  const nextCategoryCallback = useAtomCallback(useCallback((get) => get(nextCategoryAtom), []));
+  const categoriesCallback = useAtomCallback(useCallback((get) => get(categoriesAtom), []));
+
 
   const pageType = useAtomValue(pageTypeAtom);
   const currentSubCategories = useAtomValue(currentSubCategoriesAtom);
   const page = useAtomValue(pageAtom);
+  const maxPages = useAtomValue(maxPagesAtom);
   const isLastQuestionOfCurrentCategory = useAtomValue(isLastQuestionOfCurrentCategoryAtom);
   const selectedSubCategory = useAtomValue(selectedSubCategoryAtom);
   const payload = useAtomValue(payloadAtom);
@@ -77,114 +77,110 @@ export default function Quiz() {
   const [emailSent, setEmailSent] = useState(false);
   const [error, setError] = useState(false);
 
-  /*function handlePrevivousPage(): void {
-    if (currentCategoryPage! > 0) {
-      setCurrentCategoryPage(currentCategoryPage! - 1);
+  async function handlePrevivousPage(): Promise<void> {
+    const previousPage = pages[pages.length - 1];
 
-      if (currentCategoryPage >= currentCategoryQuestions.length) {
-        const parentCategory = findById(categories, currentCategory.parentId)!;
+    setPages(removeAtIndex(pages, pages.length - 1));
 
-        setParentCategory({
-          ...parentCategory,
-          finalizedSubCategories:
-            parentCategory.finalizedSubCategories!.length === 1
-              ? undefined
-              : removeAtIndex(
-                  parentCategory.finalizedSubCategories!,
-                  parentCategory.finalizedSubCategories!.length - 1
-                ),
-        });
-      }
-    } else {
-      const parentCategory = findById(categories, currentCategory.parentId)!;
-
-      setCurrentCategory(parentCategory);
-    }
-  }*/
-
-  /*function handleNextPage(): void {
-    if (
-      pageType === PageType.SimpleQuestion ||
-      pageType === PageType.MultipleChoiceQuestion ||
-      pageType === PageType.FinalizeCategory
-    ) {
-      if (isLastQuestionOfCurrentCategory) {
-        setParentCategory({
-          ...parentCategory!,
-          finalizedSubCategories: parentCategory!.finalizedSubCategories
-            ? [...parentCategory!.finalizedSubCategories, currentCategory.id]
-            : [currentCategory.id],
-        });
-      } else if (currentCategoryPage >= currentCategoryQuestions.length) {
-        if(nextCategory?.hasInterest) {
-          setCurrentCategory(nextCategory);
-        } else {
-          setParentCategory({
-            ...parentCategory!,
-            finalizedSubCategories: parentCategory!.finalizedSubCategories
-              ? [...parentCategory!.finalizedSubCategories, nextCategory!.id]
-              : [nextCategory!.id],
-          });
-        }
-      }
-    }
-
-    setCurrentCategoryPage(currentCategoryPage! + 1);
-  }*/
-
-  function handlePrevivousPage(): void {
-    switch (pageType) {
+    switch (previousPage.type) {
       case PageType.Category:
-        setCurrentCategorySelectedSubCategoryId(currentCategory.id);
-        setCurrentCategory(parentCategory!);
+        {
+          const pageCurrentCategory = findById(categories, previousPage.currentCategoryId)!;
+          setCurrentCategory(pageCurrentCategory);
+        }
 
         break;
-
       case PageType.SimpleQuestion:
       case PageType.MultipleChoiceQuestion:
-        if (currentCategory.page) {
-          setCurrentCategoryPage(currentCategoryPage - 1);
-        } else {
-          setCurrentCategorySelectedSubCategoryId(currentCategory.id);
-          setCurrentCategory(parentCategory!);
+        {
+          const pageCurrentQuestion = findById(questions, previousPage.currentQuestionId)!;
+          const pageCurrentCategory = findById(categories, pageCurrentQuestion.categoryId)!;
+
+          const pageCategoryQuestions = questions.filter(
+            (question) => question.categoryId === pageCurrentQuestion.categoryId
+          );
+          const pageCategoryQuestionIndex = pageCategoryQuestions.findIndex(
+            (question) => question.id === pageCurrentQuestion.id
+          );
+
+          setCurrentCategory({
+            ...pageCurrentCategory,
+            page: pageCategoryQuestionIndex,
+          });
+
+          const isLastCategoryQuestion =
+            pageCategoryQuestions[pageCategoryQuestions.length - 1].id === pageCurrentQuestion.id;
+
+          if (isLastCategoryQuestion) {
+            const pageParentCategory = findById(categories, pageCurrentCategory.parentId)!;
+            const pageParentCategoryIndex = categories.findIndex((category) => category.id === pageParentCategory?.id);
+
+            setCategories(
+              replaceAtIndex(await categoriesCallback()!, pageParentCategoryIndex, {
+                ...pageParentCategory,
+                finalizedSubCategories:
+                  pageParentCategory.finalizedSubCategories!.length > 1
+                    ? pageParentCategory.finalizedSubCategories?.filter(
+                        (categoryId) => categoryId !== pageCurrentCategory.id
+                      )
+                    : undefined,
+              })
+            );
+          }
         }
-
         break;
-
       case PageType.FinalizeCategory:
-      case PageType.MailForm:
-        if(parentCategory!.finalizedSubCategories && parentCategory!.finalizedSubCategories.length > 1) {
-          setParentCategory({
-            ...parentCategory!,
-            finalizedSubCategories: removeAtIndex(parentCategory!.finalizedSubCategories, parentCategory!.finalizedSubCategories.length - 1)
-          });
-        } else {
-          setParentCategory({
-            ...parentCategory!,
-            finalizedSubCategories: undefined
-          });
+        {
+          const pageCurrentCategory = findById(categories, previousPage.currentCategoryId)!;
+          const pageParentCategory = findById(categories, pageCurrentCategory.parentId)!;
+          const pageParentCategoryIndex = categories.findIndex((category) => category.id === pageParentCategory?.id);
 
-          setCurrentCategoryPage(currentCategoryPage - 1);
+          setCurrentCategory(pageCurrentCategory);
+
+          setCategories(
+            replaceAtIndex(await categoriesCallback()!, pageParentCategoryIndex, {
+              ...pageParentCategory!,
+              finalizedSubCategories: pageParentCategory.finalizedSubCategories?.filter(
+                (finalizedCategory) => finalizedCategory !== previousPage.nextCategoryId
+              ),
+            })
+          );   
         }
         break;
-
-      default:
-        alert('Not valid PageType!');
+      default: {
+        alert('Not a valid PageType!');
+      }
     }
   }
 
   async function handleNextPage(): Promise<void> {
     switch (pageType) {
       case PageType.Category:
+        setPages([
+          ...pages,
+          {
+            type: pageType,
+            currentCategoryId: currentCategory.id,
+          },
+        ]);
+
         setCurrentCategory((await selectedSubCategoryCallback())!);
         setCurrentCategorySelectedSubCategoryId(undefined);
         break;
 
       case PageType.SimpleQuestion:
       case PageType.MultipleChoiceQuestion:
+        setPages([
+          ...pages,
+          {
+            type: pageType,
+            currentQuestionId: currentQuestion!.id,
+          },
+        ]);
+
         setCurrentCategoryPage(currentCategoryPage! + 1);
 
-        if(isLastQuestionOfCurrentCategory) {
+        if (isLastQuestionOfCurrentCategory) {
           setParentCategory({
             ...parentCategory!,
             finalizedSubCategories: parentCategory!.finalizedSubCategories
@@ -195,8 +191,18 @@ export default function Quiz() {
         break;
 
       case PageType.FinalizeCategory:
-        if(nextCategory?.hasInterest) {
-          setCurrentCategoryPage(0);
+        const nextCategory = await nextCategoryCallback();
+
+        setPages([
+          ...pages,
+          {
+            type: pageType,
+            currentCategoryId: currentCategory!.id,
+            nextCategoryId: nextCategory!.id,
+          },
+        ]);
+
+        if (nextCategory?.hasInterest) {
           setCurrentCategory(nextCategory);
         } else {
           setParentCategory({
@@ -220,6 +226,7 @@ export default function Quiz() {
     if (confirm('Willst du wirklich von vorne beginnen?')) {
       setCategories(RESET);
       setQuestions(RESET);
+      setPages(RESET);
     }
   }
 
@@ -241,6 +248,8 @@ export default function Quiz() {
     if (nextCategory) {
       setNextCategory({ ...nextCategory, hasInterest: value });
     }
+
+    handleNextPage();
   }
 
   function handleMailFormSubmit(firstName: string, email: string): void {
@@ -253,7 +262,7 @@ export default function Quiz() {
       ...payload,
       firstName,
       email,
-      recommendationsLink
+      recommendationsLink,
     });
 
     fetch(config.subscribeUrl, {
@@ -279,7 +288,6 @@ export default function Quiz() {
         setError(true);
       });
   }
-
 
   const pageTypes = {
     [PageType.Category]: (
@@ -321,26 +329,11 @@ export default function Quiz() {
     <div className="tw-p-10 tw-min-h-full">
       <div className="tw-shadow-quiz tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
         <div className="tw-flex tw-justify-between tw-pt-3">
-          <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">Seite {page + 1}</div>
+          <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">Seite {page} / {maxPages}</div>
 
           <div className="tw-bg-jansen-yellow tw-text-white tw-p-3 -tw-mr-3">Zu 100% für 0 Euro</div>
         </div>
 
-        <div className="tw-hidden">
-        currentCategory: <pre className="tw-text-xs">{JSON.stringify(currentCategory, null, 2)}</pre>
-        nextCategory: <pre className="tw-text-xs">{JSON.stringify(nextCategory, null, 2)}</pre>
-        parentCategory: <pre className="tw-text-xs">{JSON.stringify(parentCategory, null, 2)}</pre>
-        currentCategorySelectedSubCategoryId: <pre className="tw-text-xs">{JSON.stringify(currentCategorySelectedSubCategoryId, null, 2)}</pre>
-        selectedSubCategory: <pre className="tw-text-xs">{JSON.stringify(selectedSubCategory, null, 2)}</pre>
-        isLastQuestionOfCurrentCategory:{' '}
-        <pre className="tw-text-xs">{JSON.stringify(isLastQuestionOfCurrentCategory, null, 2)}</pre>
-        currentCategoryPage: <pre className="tw-text-xs tw-hidden">{JSON.stringify(currentCategoryPage, null, 2)}</pre>
-        questions: <pre className="tw-text-xs tw-hidden">{JSON.stringify(questions, null, 2)}</pre>
-        currentCategoryQuestions:{' '}
-        <pre className="tw-text-xs tw-hidden">{JSON.stringify(currentCategoryQuestions, null, 2)}</pre>
-        currentQuestion: <pre className="tw-text-xs">{JSON.stringify(currentQuestion, null, 2)}</pre>
-
-        </div>
         {emailSent ? (
           <div className="tw-pb-10 tw-px-10">
             <div className="tw-p-10">

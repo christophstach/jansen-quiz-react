@@ -44,5 +44,4 @@ const categories: Category[] = [
   },
 ];
 
-
 export const categoriesAtom = atomWithStorage('categoriesAtom', categories);
