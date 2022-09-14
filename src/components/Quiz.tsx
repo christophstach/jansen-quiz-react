@@ -12,11 +12,10 @@ import {
   parentCategoryAtom,
   selectedSubCategoryAtom,
 } from '../atoms/derived/categories';
-import { formDataAtom, payloadAtom } from '../atoms/derived/data';
+import { payloadAtom } from '../atoms/derived/data';
 
 import { canGoNextPageAtom, canGoPreviousPageAtom, maxPagesAtom, pageAtom, pageTypeAtom } from '../atoms/derived/pages';
 import {
-  answeredQuestionsAtom,
   currentQuestionAtom,
   currentQuestionSelectedAnwerIdAtom,
   currentQuestionSelectedAnwerIdsAtom,
@@ -28,7 +27,7 @@ import { pagesAtom } from '../atoms/pages';
 import { questionsAtom } from '../atoms/questions';
 import { config } from '../config';
 import { PageType } from '../types';
-import { findById, formDataToUrlParams, removeAtIndex, replaceAtIndex } from '../utils';
+import { findById, payloadToEncodedLink, removeAtIndex, replaceAtIndex } from '../utils';
 import { CategoryPage } from './pages/CategoryPage';
 import { ErrorPage } from './pages/ErrorPage';
 import { FinalizeCategoryPage } from './pages/FinalizeCategoryPage';
@@ -65,11 +64,9 @@ export default function Quiz() {
   const selectedSubCategory = useAtomValue(selectedSubCategoryAtom);
   const currentQuestion = useAtomValue(currentQuestionAtom);
   const currentQuestionAnswers = useAtomValue(currentQuestionAnswersAtom);
-  const answeredQuestions = useAtomValue(answeredQuestionsAtom);
   const canGoPreviousPage = useAtomValue(canGoPreviousPageAtom);
   const canGoNextPage = useAtomValue(canGoNextPageAtom);
   const payload = useAtomValue(payloadAtom);
-  const formData = useAtomValue(formDataAtom);
 
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -261,9 +258,11 @@ export default function Quiz() {
   function handleMailFormSubmit(firstName: string, email: string): void {
     setLoading(true);
 
-    formData.append('firstName', firstName);
+    const recommendationsLink = `${config.recommendationsLinkPrefix}${payloadToEncodedLink({
+      ...payload,
+      firstName,
+    })}`;
 
-    const recommendationsLink = `${config.recommendationsLinkPrefix}${formDataToUrlParams(formData)}`;
     const json = JSON.stringify({
       ...payload,
       firstName,
@@ -374,19 +373,23 @@ export default function Quiz() {
           </div>
         ) : (
           <>
-            <div className="tw-p-10">
-              <Rootline page={page} maxPages={maxPages} />
-            </div>
+            {currentCategory.parentId && (
+              <div className="tw-p-10">
+                <Rootline page={page} maxPages={maxPages} />
+              </div>
+            )}
 
             <div className="tw-pb-10 tw-px-10">{pageTypes[pageType]}</div>
 
-            <QuizFooter
-              previousButtonEnabled={canGoPreviousPage}
-              nextButtonEnabled={canGoNextPage}
-              onPreviousPage={handlePrevivousPage}
-              onNextPage={handleNextPage}
-              onReset={handleResetQuiz}
-            />
+            {currentCategory.parentId && (
+              <QuizFooter
+                previousButtonEnabled={canGoPreviousPage}
+                nextButtonEnabled={canGoNextPage}
+                onPreviousPage={handlePrevivousPage}
+                onNextPage={handleNextPage}
+                onReset={handleResetQuiz}
+              />
+            )}
           </>
         )}
       </div>

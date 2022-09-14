@@ -2,7 +2,7 @@ export type Category = {
   id: string;
   icon?: string;
   active?: boolean;
-  title: string;
+  title?: string;
   text?: string;
   parentId?: string;
   page?: number;

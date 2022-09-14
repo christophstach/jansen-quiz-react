@@ -27,25 +27,60 @@ export function CategoryPage(props: CategoryPageProps) {
       </div>
 
       {subCategories.map((subCategory) => (
-        <label
-          key={subCategory.id}
-          htmlFor={`sub-category-${subCategory.id}`}
-          className="tw-cursor-pointer tw-border-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-purple tw-flex tw-gap-3 tw-items-center"
-        >
-          <div className="flex items-center">
-            <input
-              readOnly
-              name="sub-category"
-              type="radio"
-              id={`sub-category-${subCategory.id}`}
-              value={subCategory.id}
-              checked={subCategory.id === selectedSubCategory?.id}
-              onClick={() => handleSubCategorySelected(subCategory.id)}
-            />
-          </div>
+        <>
+          {category.parentId ? (
+            <label
+              key={subCategory.id}
+              htmlFor={`sub-category-${subCategory.id}`}
+              className="tw-cursor-pointer tw-border-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-purple tw-flex tw-gap-3 tw-items-center"
+            >
+              <div className="flex items-center">
+                <input
+                  readOnly
+                  name="sub-category"
+                  type="radio"
+                  id={`sub-category-${subCategory.id}`}
+                  value={subCategory.id}
+                  checked={subCategory.id === selectedSubCategory?.id}
+                  onClick={() => handleSubCategorySelected(subCategory.id)}
+                />
+              </div>
 
-          <div>{subCategory.title}</div>
-        </label>
+              <div>{subCategory.title}</div>
+            </label>
+          ) : (
+            <>
+              <div className="tw-py-2 tw-my-5 tw-flex tw-gap-4">
+                <div className="tw-w-64">
+                  <img
+                    className="tw-w-full tw-rounded-full"
+                    src="https://andreasjansen.com/wp-content/uploads/2022/09/Foto-Andreas-Jansen.png"
+                    alt="Ich"
+                  />
+                </div>
+                <div>
+                  <p>
+                    Ich bin Andreas, Finanzexperte, Autor des Quizzes und dein Begleiter durchs Quiz. Das Ziel des
+                    Quizzes ist es deine persönlichen Finanzlücken und Potenzial zu finden. Fülle den Test
+                    wahrheitsgemäßg aus und entscheide dich bei offenen Fragen spontan.
+                  </p>
+                </div>
+              </div>
+
+              <p className="tw-py-2 tw-text-xs tw-text-jansen-gray">
+                Im Rahmen des Finanz-Quizzes werden deine angegeben personenbezogen Daten gemäß der Datenschutzerklärung
+                verarbeitet, um dir ein aussagekräftes Ergebnis zu liefern.
+              </p>
+
+              <button
+                className="tw-cursor-pointer tw-border-jansen-purple tw-bg-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-yellow tw-text-center tw-w-full tw-font-bold tw-uppercase tw-text-xl"
+                onClick={() => handleSubCategorySelected(subCategory.id)}
+              >
+                {subCategory.title}
+              </button>
+            </>
+          )}
+        </>
       ))}
     </>
   );

@@ -24,6 +24,10 @@ export function removeAtIndex<T>(array: T[], index: number): T[] {
   return [...array.slice(0, index), ...array.slice(index + 1)];
 }
 
+export function payloadToEncodedLink(payload: Record<string, string | string[]>, queryParam = 'e'): string {
+  return `${queryParam}=${btoa(JSON.stringify(payload))}`;
+}
+
 export function formDataToUrlParams(formData: FormData) {
   const data = [...formData.entries()];
 

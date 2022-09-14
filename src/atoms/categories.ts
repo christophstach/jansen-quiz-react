@@ -2,30 +2,18 @@ import { atomWithStorage } from 'jotai/utils';
 import { Category } from '../types';
 
 const categories: Category[] = [
-  // {
-  //   id: '0',
-  //   title: '',
-  //   text: 'Für welchen Bereich interresierst du dich am meisten?',
-  //   active: true,
-  // },
+  {
+    id: '0',
+    text: 'Hallo 👋, herzlich willkommen im Finanz-Quiz.',
+    active: true,
+  },
 
   {
     id: '1',
-    title: 'Finanzen',
+    title: 'Start',
     text: 'Womit willst du dich beschäftigen?',
-    active: true,
-    // parentId: '0',
+    parentId: '0',
   },
-  // {
-  //   id: '2',
-  //   title: 'Gesundheit',
-  //   parentId: '0',
-  // },
-  // {
-  //   id: '3',
-  //   title: 'Happiness',
-  //   parentId: '0',
-  // },
 
   {
     id: '1.1',
