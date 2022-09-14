@@ -168,7 +168,7 @@ const questions: Question[] = [
     categoryId: '1.3',
     id: '25',
     text: 'Welche dieser Versicherungen besitzt du?',
-    type: QuestionType.Simple,
+    type: QuestionType.MultipleChoice,
   },
 
   {
