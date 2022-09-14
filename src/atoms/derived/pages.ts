@@ -1,6 +1,5 @@
 import { atom } from 'jotai';
 import { PageType, QuestionType } from '../../types';
-import { treeDepth } from '../../utils';
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
 import { pagesAtom } from '../pages';
@@ -13,7 +12,6 @@ import {
   hasNextCategoryAtom,
   isLeafCurrentCategoryAtom,
   nextCategoryAtom,
-  parentCategoryAtom,
 } from './categories';
 import { currentCategoryQuestionsAtom, currentQuestionAtom } from './questions';
 
@@ -72,16 +70,6 @@ export const canGoNextPageAtom = atom((get) => {
       alert('Not a valid PageType!');
       return false;
   }
-
-  /*if (pageType === PageType.Category) {
-    return true;
-  } else if (pageType === PageType.SimpleQuestion || pageType === PageType.MultipleChoiceQuestion) {
-    return isQuestionValid(currentQuestion!);
-  } else if (pageType === PageType.FinalizeCategory) {
-    const nextCategory = get(nextCategoryAtom);
-
-    return nextCategory?.hasInterest !== undefined;
-  }*/
 });
 
 export const pageTypeAtom = atom((get) => {
