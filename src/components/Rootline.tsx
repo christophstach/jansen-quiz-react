@@ -1,47 +1,30 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+export type RootlineProps = {
+  page: number;
+  maxPages: number;
+};
 
-export default function Rootline() {
-  /*const pages = useAtomValue(pagesState);
-  const setDepth = useSetAtom(depthAtom);
+export function Rootline(props: RootlineProps) {
+  const { page, maxPages } = props;
+  let percent: number;
 
-  function handlePageClick(page: number) {
-    setDepth(page);
+  if (page === -1) {
+    percent = 5;
+  } else if (page === -2) {
+    percent = 85;
+  } else if (page === -3) {
+    percent = 95;
+  } else if (page === -4) {
+    percent = 0;
+  } else {
+    percent = Math.min(Math.round((page / maxPages) * 100), 84);
   }
 
   return (
-    <nav className="tw-relative tw-hidden xl:tw-block">
-      <div className="tw-h-2 tw-w-full tw-absolute tw-bg-gray-300 tw-mt-[6px] -tw-z-2"></div>
-      <div className="tw-absolute tw-h-5 tw-w-5 tw-text-3xl tw-rounded-full tw-bg-green-600 tw-right-0 tw-text-white  tw-flex tw-items-center tw-justify-center">
-        <span dangerouslySetInnerHTML={{ __html: '&bullet;' }} />
-      </div>
-
-      <ul className="tw-absolute tw-flex">
-        {pages.map((page, i) => (
-          <li className="tw-flex tw-items-center" key={page}>
-            {i < pages.length - 1 ? (
-              <>
-                <button
-                  className="tw-h-5 tw-w-5 tw-text-[0.6rem] tw-rounded-full tw-bg-jansen-yellow tw-text-white tw-flex tw-items-center tw-justify-center"
-                  onClick={() => handlePageClick(page)}
-                >
-                  {page + 1}
-                </button>
-
-                <div className="tw-bg-jansen-yellow tw-h-2 tw-w-3 -tw-m-1"></div>
-              </>
-            ) : (
-              <button
-                className="tw-h-5 tw-w-5 tw-text-[0.6rem] tw-rounded-full tw-bg-gray-500 tw-text-white tw-flex tw-items-center tw-justify-center"
-                onClick={() => handlePageClick(page)}
-              >
-                {page + 1}
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className="tw-w-full tw-bg-gray-200 tw-rounded-full">
+      <div
+        className="tw-bg-jansen-yellow tw-text-xs tw-font-medium tw-text-jansen-purple tw-text-center tw-h-2 tw-leading-none tw-rounded-l-full tw-rounded-r-full tw-transition-[width] tw-ease-in-out"
+        style={{ width: `${percent}%` }}
+      ></div>
+    </div>
   );
-  */
-  return <div>Die Rootline!</div>;
 }

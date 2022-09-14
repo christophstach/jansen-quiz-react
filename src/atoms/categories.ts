@@ -1,20 +1,20 @@
-import { atom } from 'jotai';
-import { atomFamily, atomWithStorage } from 'jotai/utils';
+import { atomWithStorage } from 'jotai/utils';
 import { Category } from '../types';
 
 const categories: Category[] = [
-  {
-    id: '0',
-    title: '',
-    text: 'Für welchen Bereich interresierst du dich am meisten?',
-    active: true,
-  },
+  // {
+  //   id: '0',
+  //   title: '',
+  //   text: 'Für welchen Bereich interresierst du dich am meisten?',
+  //   active: true,
+  // },
 
   {
     id: '1',
     title: 'Finanzen',
     text: 'Womit willst du dich beschäftigen?',
-    parentId: '0',
+    active: true,
+    // parentId: '0',
   },
   // {
   //   id: '2',

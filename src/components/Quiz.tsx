@@ -16,7 +16,7 @@ import { formDataAtom, payloadAtom } from '../atoms/derived/data';
 
 import { canGoNextPageAtom, canGoPreviousPageAtom, maxPagesAtom, pageAtom, pageTypeAtom } from '../atoms/derived/pages';
 import {
-  currentCategoryQuestionsAtom,
+  answeredQuestionsAtom,
   currentQuestionAtom,
   currentQuestionSelectedAnwerIdAtom,
   currentQuestionSelectedAnwerIdsAtom,
@@ -37,6 +37,7 @@ import MultipleChoiceQuestionPage from './pages/MultipleChoiceQuestionPage';
 import SimpleQuestionPage from './pages/SimpleQuestionsPage';
 
 import { QuizFooter } from './QuizFooter';
+import { Rootline } from './Rootline';
 
 export default function Quiz() {
   const [currentCategory, setCurrentCategory] = useAtom(currentCategoryAtom);
@@ -47,11 +48,10 @@ export default function Quiz() {
   const [currentCategoryPage, setCurrentCategoryPage] = useAtom(currentCategoryPageAtom);
   const [parentCategory, setParentCategory] = useAtom(parentCategoryAtom);
   const [nextCategory, setNextCategory] = useAtom(nextCategoryAtom);
-  const [currentCategorySelectedSubCategoryId, setCurrentCategorySelectedSubCategoryId] = useAtom(
-    currentCategorySelectedSubCategoryIdAtom
-  );
   const [mailForm, setMailForm] = useAtom(mailFormAtom);
   const [pages, setPages] = useAtom(pagesAtom);
+
+  const setCurrentCategorySelectedSubCategoryId = useSetAtom(currentCategorySelectedSubCategoryIdAtom);
 
   const selectedSubCategoryCallback = useAtomCallback(useCallback((get) => get(selectedSubCategoryAtom), []));
   const nextCategoryCallback = useAtomCallback(useCallback((get) => get(nextCategoryAtom), []));
@@ -63,14 +63,13 @@ export default function Quiz() {
   const maxPages = useAtomValue(maxPagesAtom);
   const isLastQuestionOfCurrentCategory = useAtomValue(isLastQuestionOfCurrentCategoryAtom);
   const selectedSubCategory = useAtomValue(selectedSubCategoryAtom);
-  const payload = useAtomValue(payloadAtom);
-  const formData = useAtomValue(formDataAtom);
-
   const currentQuestion = useAtomValue(currentQuestionAtom);
-  const currentCategoryQuestions = useAtomValue(currentCategoryQuestionsAtom);
   const currentQuestionAnswers = useAtomValue(currentQuestionAnswersAtom);
+  const answeredQuestions = useAtomValue(answeredQuestionsAtom);
   const canGoPreviousPage = useAtomValue(canGoPreviousPageAtom);
   const canGoNextPage = useAtomValue(canGoNextPageAtom);
+  const payload = useAtomValue(payloadAtom);
+  const formData = useAtomValue(formDataAtom);
 
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -226,6 +225,7 @@ export default function Quiz() {
       setCategories(RESET);
       setQuestions(RESET);
       setPages(RESET);
+      setMailForm(RESET);
     }
   }
 
@@ -249,6 +249,13 @@ export default function Quiz() {
     }
 
     handleNextPage();
+  }
+
+  function handleMailFormChange(firstName: string, email: string) {
+    setMailForm({
+      firstName,
+      email,
+    });
   }
 
   function handleMailFormSubmit(firstName: string, email: string): void {
@@ -278,6 +285,7 @@ export default function Quiz() {
 
         setCategories(RESET);
         setQuestions(RESET);
+        setPages(RESET);
         setMailForm(RESET);
 
         window.location.replace(recommendationsLink);
@@ -320,7 +328,16 @@ export default function Quiz() {
         onContinueWithNextCategoryValueChange={handleContinueWithNextCategoryValueChange}
       />
     ),
-    [PageType.MailForm]: <MailFormPage onSubmit={handleMailFormSubmit} loading={loading} error={error} />,
+    [PageType.MailForm]: (
+      <MailFormPage
+        firstName={mailForm.firstName}
+        email={mailForm.email}
+        loading={loading}
+        error={error}
+        onSubmit={handleMailFormSubmit}
+        onChange={handleMailFormChange}
+      />
+    ),
     [PageType.Error]: <ErrorPage />,
   };
 
@@ -329,7 +346,19 @@ export default function Quiz() {
       <div className="tw-shadow-quiz tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
         <div className="tw-flex tw-justify-between tw-pt-3">
           <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">
-            Seite {page} / {maxPages}
+            {page === -1 && <>Start</>}
+
+            {page === -2 && <>Fast geschafft</>}
+
+            {page === -3 && <>Ziel</>}
+
+            {page === -4 && <>Fehler</>}
+
+            {page >= 0 && (
+              <>
+                Schritt {page + 1} / {maxPages}
+              </>
+            )}
           </div>
 
           <div className="tw-bg-jansen-yellow tw-text-white tw-p-3 -tw-mr-3">Zu 100% für 0 Euro</div>
@@ -339,12 +368,16 @@ export default function Quiz() {
           <div className="tw-pb-10 tw-px-10">
             <div className="tw-p-10">
               <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
-                Deine Auswertung ist auf dem Weg du wirst weitergeleitet...
+                Deine Auswertung ist auf dem Weg. Du wirst weitergeleitet...
               </h1>
             </div>
           </div>
         ) : (
           <>
+            <div className="tw-p-10">
+              <Rootline page={page} maxPages={maxPages} />
+            </div>
+
             <div className="tw-pb-10 tw-px-10">{pageTypes[pageType]}</div>
 
             <QuizFooter

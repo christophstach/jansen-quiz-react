@@ -1,23 +1,33 @@
-import { useAtom } from 'jotai';
-import { FormEvent } from 'react';
-import { emailAtom, firstNameAtom } from '../../atoms/derived/mailForm';
+import { FormEvent, useState } from 'react';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export type MailFormPageProps = {
-  onSubmit: (firstName: string, email: string) => void;
+  firstName: string;
+  email: string;
   loading: boolean;
   error: boolean;
+  onSubmit: (firstName: string, email: string) => void;
+  onChange: (firstName: string, email: string) => void;
 };
 
 export function MailFormPage(props: MailFormPageProps) {
-  const { onSubmit, loading, error } = props;
+  const { loading, error, firstName, email, onSubmit, onChange } = props;
+  const [inputFirstName, setInputFirstName] = useState(firstName);
+  const [inputEmail, setInputEmail] = useState(email);
 
-  const [firstName, setFirstName] = useAtom(firstNameAtom);
-  const [email, setEmail] = useAtom(emailAtom);
+  function handleFirstNameChange(firstName: string): void {
+    setInputFirstName(firstName);
+    onChange(firstName, email);
+  }
 
-  function handleSubmit(event: FormEvent) {
+  function handleEmailChange(email: string): void {
+    setInputEmail(email);
+    onChange(firstName, email);
+  }
+
+  function handleSubmit(event: FormEvent): void {
     event.preventDefault();
-    onSubmit(firstName, email);
+    onSubmit(inputFirstName, inputEmail);
   }
 
   return (
@@ -37,8 +47,8 @@ export function MailFormPage(props: MailFormPageProps) {
             className="tw-p-3 tw-w-full tw-border"
             type="text"
             placeholder="Vorname (Optional)"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={inputFirstName}
+            onChange={(e) => handleFirstNameChange(e.target.value)}
           />
         </div>
       </div>
@@ -55,8 +65,8 @@ export function MailFormPage(props: MailFormPageProps) {
             type="email"
             placeholder="E-Mail"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={inputEmail}
+            onChange={(e) => handleEmailChange(e.target.value)}
           />
         </div>
       </div>

@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      transitionProperty: {
+        width: 'width',
+      },
       colors: {
         'jansen-purple': '#270d5b',
         'jansen-yellow': '#e9c142',

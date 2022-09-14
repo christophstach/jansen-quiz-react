@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
 import { PageType, QuestionType } from '../../types';
+import { treeDepth } from '../../utils';
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
 import { pagesAtom } from '../pages';
@@ -17,34 +18,29 @@ import { currentCategoryQuestionsAtom, currentQuestionAtom } from './questions';
 
 export const pageAtom = atom((get) => {
   const pages = get(pagesAtom);
+  const pageType = get(pageTypeAtom);
+  const categories = get(categoriesAtom);
+  const currentCategory = get(currentCategoryAtom);
 
-  return pages.length + 1;
+  if (pageType === PageType.Category) {
+    return -1;
+  } else if (pageType === PageType.FinalizeCategory) {
+    return -2;
+  } else if (pageType === PageType.MailForm) {
+    return -3;
+  } else if (pageType === PageType.Error) {
+    return -4;
+  } else if (pageType === PageType.SimpleQuestion || pageType === PageType.MultipleChoiceQuestion) {
+    return currentCategory.page ? currentCategory.page : 0;
+  }
+
+  return -4;
 });
 
 export const maxPagesAtom = atom((get) => {
-  const maxTreeDepth = 2;
-  const categories = get(categoriesAtom);
-  const questions = get(questionsAtom);
-  const currentCategory = get(currentCategoryAtom);
+  const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
 
-  const currentCategorySiblings = get(currentCategorySiblingsAtom);
-  const currentCategoryChildren = categories.filter((category) => category.parentId === currentCategory.id);
-
-  const categoriesWithInterest = categories.filter(
-    (category) => category.hasInterest || category.hasInterest === undefined
-  );
-  const categoriesWithInterestIds = categoriesWithInterest.map((category) => category.id);
-  const categoriesWithInterestQuestions = questions.filter((question) =>
-    categoriesWithInterestIds.includes(question.categoryId)
-  );
-
-  return (
-    maxTreeDepth +
-    currentCategorySiblings.length +
-    categoriesWithInterestQuestions.length +
-    Math.max(currentCategoryChildren.length - 1, 0) +
-    1
-  );
+  return currentCategoryQuestions.length;
 });
 
 export const canGoPreviousPageAtom = atom((get) => {

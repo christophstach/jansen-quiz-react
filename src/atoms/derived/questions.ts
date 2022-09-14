@@ -79,3 +79,18 @@ export const isLastQuestionOfCurrentCategoryAtom = atom((get) => {
 
   return currentCategoryQuestions.length - 1 === currentCategoryPage;
 });
+
+export const answeredQuestionsAtom = atom((get) => {
+  const questions = get(questionsAtom);
+  const answeredQuestions = questions.filter((question) => {
+    if (question.type === QuestionType.Simple) {
+      return question.selectedAnswerId !== undefined;
+    } else if (question.type === QuestionType.MultipleChoice) {
+      return question.selectedAnswerIds !== undefined;
+    }
+
+    return false;
+  });
+
+  return answeredQuestions;
+});
