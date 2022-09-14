@@ -57,7 +57,6 @@ export default function Quiz() {
   const nextCategoryCallback = useAtomCallback(useCallback((get) => get(nextCategoryAtom), []));
   const categoriesCallback = useAtomCallback(useCallback((get) => get(categoriesAtom), []));
 
-
   const pageType = useAtomValue(pageTypeAtom);
   const currentSubCategories = useAtomValue(currentSubCategoriesAtom);
   const page = useAtomValue(pageAtom);
@@ -144,7 +143,7 @@ export default function Quiz() {
                 (finalizedCategory) => finalizedCategory !== previousPage.nextCategoryId
               ),
             })
-          );   
+          );
         }
         break;
       default: {
@@ -329,7 +328,9 @@ export default function Quiz() {
     <div className="tw-p-10 tw-min-h-full">
       <div className="tw-shadow-quiz tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
         <div className="tw-flex tw-justify-between tw-pt-3">
-          <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">Seite {page} / {maxPages}</div>
+          <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">
+            Seite {page} / {maxPages}
+          </div>
 
           <div className="tw-bg-jansen-yellow tw-text-white tw-p-3 -tw-mr-3">Zu 100% für 0 Euro</div>
         </div>

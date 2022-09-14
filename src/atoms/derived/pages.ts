@@ -30,12 +30,21 @@ export const maxPagesAtom = atom((get) => {
   const currentCategorySiblings = get(currentCategorySiblingsAtom);
   const currentCategoryChildren = categories.filter((category) => category.parentId === currentCategory.id);
 
-  const categoriesWithInterest = categories.filter((category) => category.hasInterest || category.hasInterest === undefined);
+  const categoriesWithInterest = categories.filter(
+    (category) => category.hasInterest || category.hasInterest === undefined
+  );
   const categoriesWithInterestIds = categoriesWithInterest.map((category) => category.id);
-  const categoriesWithInterestQuestions = questions.filter((question) => categoriesWithInterestIds.includes(question.categoryId))
+  const categoriesWithInterestQuestions = questions.filter((question) =>
+    categoriesWithInterestIds.includes(question.categoryId)
+  );
 
-
-  return maxTreeDepth + currentCategorySiblings.length + categoriesWithInterestQuestions.length + Math.max (currentCategoryChildren.length - 1, 0) + 1;
+  return (
+    maxTreeDepth +
+    currentCategorySiblings.length +
+    categoriesWithInterestQuestions.length +
+    Math.max(currentCategoryChildren.length - 1, 0) +
+    1
+  );
 });
 
 export const canGoPreviousPageAtom = atom((get) => {
