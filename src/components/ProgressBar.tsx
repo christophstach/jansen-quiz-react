@@ -1,9 +1,9 @@
-export type RootlineProps = {
+export type ProgessBarProps = {
   page: number;
   maxPages: number;
 };
 
-export function Rootline(props: RootlineProps) {
+export function ProgressBar(props: ProgessBarProps) {
   const { page, maxPages } = props;
   let percent: number;
 
@@ -16,7 +16,7 @@ export function Rootline(props: RootlineProps) {
   } else if (page === -4) {
     percent = 0;
   } else {
-    percent = Math.min(Math.round((page / maxPages) * 100), 84);
+    percent = Math.max(Math.min(Math.round((page / maxPages) * 100), 84), 10);
   }
 
   return (

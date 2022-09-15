@@ -17,6 +17,8 @@ export enum PageType {
   FinalizeCategory = 'FINALIZE_CATEGORY',
   SimpleQuestion = 'SIMPLE_QUESTION',
   MultipleChoiceQuestion = 'MULTIPLE_CHOICE_QUESTION',
+  FinalSimpleQuestion = 'FINAL_SIMPLE_QUESTION',
+  FinalMultipleChoiceQuestion = 'FINAL_MULTIPLE_CHOICE_QUESTION',
   Error = 'ERROR',
   MailForm = 'MAIL_FORM',
 }
@@ -36,13 +38,17 @@ export type QuestionPage = {
   currentQuestionId: string;
 };
 
+export type FinalQuestionPage = {
+  type: PageType.FinalSimpleQuestion | PageType.FinalMultipleChoiceQuestion;
+};
+
 export type FinalizeCategoryPage = {
   type: PageType.FinalizeCategory;
   currentCategoryId: string;
   nextCategoryId: string;
 };
 
-export type Page = CategoryPage | QuestionPage | FinalizeCategoryPage;
+export type Page = CategoryPage | QuestionPage | FinalQuestionPage | FinalizeCategoryPage;
 
 export type SimpleQuestion = {
   id: string;
@@ -63,7 +69,7 @@ export type MultipleChoiceQuestion = {
 };
 
 export type Question = (SimpleQuestion | MultipleChoiceQuestion) & {
-  categoryId: string;
+  categoryId: string | null;
 };
 
 export type Answer = {

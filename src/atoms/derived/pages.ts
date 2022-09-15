@@ -1,20 +1,17 @@
 import { atom } from 'jotai';
 import { PageType, QuestionType } from '../../types';
-import { treeDepth } from '../../utils';
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
-import { pagesAtom } from '../pages';
-import { questionsAtom } from '../questions';
+import { finalQuestionPageAtom, pagesAtom } from '../pages';
 import {
   currentCategoryAtom,
   currentCategoryPageAtom,
   currentCategorySelectedSubCategoryIdAtom,
-  currentCategorySiblingsAtom,
   hasNextCategoryAtom,
   isLeafCurrentCategoryAtom,
   nextCategoryAtom,
 } from './categories';
-import { currentCategoryQuestionsAtom, currentQuestionAtom } from './questions';
+import { currentCategoryQuestionsAtom, currentQuestionAtom, finalQuestionsAtom } from './questions';
 
 export const pageAtom = atom((get) => {
   const pages = get(pagesAtom);
@@ -60,6 +57,8 @@ export const canGoNextPageAtom = atom((get) => {
 
     case PageType.SimpleQuestion:
     case PageType.MultipleChoiceQuestion:
+    case PageType.FinalSimpleQuestion:
+    case PageType.FinalMultipleChoiceQuestion:
       return isQuestionValid(currentQuestion!);
 
     case PageType.FinalizeCategory:
@@ -80,7 +79,11 @@ export const pageTypeAtom = atom((get) => {
   const isLeafCurrentategory = get(isLeafCurrentCategoryAtom);
 
   if (isLeafCurrentategory) {
-    const currentQuestion = get(currentQuestionAtom);
+    const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
+    const currentCategory = get(currentCategoryAtom);
+
+    const index = currentCategory.page ? currentCategory.page : 0;
+    const currentQuestion = currentCategoryQuestions.length > 0 ? currentCategoryQuestions[index] : undefined;
 
     if (currentQuestion) {
       if (currentQuestion.type === QuestionType.Simple) {
@@ -99,6 +102,21 @@ export const pageTypeAtom = atom((get) => {
           return PageType.FinalizeCategory;
         }
       } else {
+        const finalQuestions = get(finalQuestionsAtom);
+        const finalQuestionPage = get(finalQuestionPageAtom);
+
+        if (finalQuestions.length > 0) {
+          const finalQuestion = finalQuestions[finalQuestionPage];
+
+          if (finalQuestion) {
+            if (finalQuestion.type === QuestionType.Simple) {
+              return PageType.FinalSimpleQuestion;
+            } else if (finalQuestion.type === QuestionType.MultipleChoice) {
+              return PageType.FinalMultipleChoiceQuestion;
+            }
+          }
+        }
+
         return PageType.MailForm;
       }
     }

@@ -27,10 +27,9 @@ export function CategoryPage(props: CategoryPageProps) {
       </div>
 
       {subCategories.map((subCategory) => (
-        <>
+        <div key={subCategory.id}>
           {category.parentId ? (
             <label
-              key={subCategory.id}
               htmlFor={`sub-category-${subCategory.id}`}
               className="tw-cursor-pointer tw-border-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-purple tw-flex tw-gap-3 tw-items-center"
             >
@@ -80,7 +79,7 @@ export function CategoryPage(props: CategoryPageProps) {
               </button>
             </>
           )}
-        </>
+        </div>
       ))}
     </>
   );

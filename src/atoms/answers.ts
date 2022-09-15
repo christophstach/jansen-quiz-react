@@ -345,6 +345,9 @@ const answers: Answer[] = [
   { id: '296', text: 'Bücher', questionId: '29' },
 
   { id: '297', text: 'Podcast', questionId: '29' },
+
+  { id: '301', text: 'Ja', questionId: '30' },
+  { id: '302', text: 'Nein', questionId: '30' },
 ];
 
 export const answersAtom = atom(answers);

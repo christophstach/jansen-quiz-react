@@ -1,8 +1,10 @@
 import { atom } from 'jotai';
-import { Question, QuestionType } from '../../types';
+import { PageType, Question, QuestionType } from '../../types';
 import { replaceAtIndex } from '../../utils';
+import { finalQuestionPageAtom } from '../pages';
 import { questionsAtom } from '../questions';
 import { currentCategoryAtom, currentCategoryPageAtom } from './categories';
+import { pageTypeAtom } from './pages';
 
 export const currentCategoryQuestionsAtom = atom((get) => {
   const currentCategory = get(currentCategoryAtom);
@@ -16,13 +18,21 @@ export const currentCategoryQuestionsAtom = atom((get) => {
 export const currentQuestionAtom = atom((get) => {
   const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
   const currentCategory = get(currentCategoryAtom);
+  const pageType = get(pageTypeAtom);
 
-  if (currentCategoryQuestions.length > 0) {
-    const index = currentCategory.page ? currentCategory.page : 0;
+  if (pageType === PageType.FinalSimpleQuestion || pageType === PageType.FinalMultipleChoiceQuestion) {
+    const finalQuestions = get(finalQuestionsAtom);
+    const finalQuestionPage = get(finalQuestionPageAtom);
 
-    return currentCategoryQuestions[index];
+    return finalQuestions[finalQuestionPage];
   } else {
-    return undefined;
+    if (currentCategoryQuestions.length > 0) {
+      const index = currentCategory.page ? currentCategory.page : 0;
+
+      return currentCategoryQuestions[index];
+    } else {
+      return undefined;
+    }
   }
 });
 
@@ -93,4 +103,10 @@ export const answeredQuestionsAtom = atom((get) => {
   });
 
   return answeredQuestions;
+});
+
+export const finalQuestionsAtom = atom((get) => {
+  const questions = get(questionsAtom);
+
+  return questions.filter((question) => question.categoryId === null);
 });

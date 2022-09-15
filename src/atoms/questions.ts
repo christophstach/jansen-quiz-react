@@ -193,10 +193,17 @@ const questions: Question[] = [
   },
 
   {
-    categoryId: '1.3',
+    categoryId: null,
     id: '29',
     text: 'Wie würdest du am liebsten weiter dein Finanzwissen aufbauen?',
     type: QuestionType.MultipleChoice,
+  },
+
+  {
+    categoryId: null,
+    id: '30',
+    text: 'Bist du interessiert an einem per­sön­lich Coaching mit mir?',
+    type: QuestionType.Simple,
   },
 ];
 

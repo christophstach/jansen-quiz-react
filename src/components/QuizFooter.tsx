@@ -1,5 +1,3 @@
-import { useHotkeys } from 'react-hotkeys-hook';
-
 export type QuizFooterProps = {
   previousButtonEnabled: boolean;
   nextButtonEnabled: boolean;
@@ -11,9 +9,6 @@ export type QuizFooterProps = {
 
 export function QuizFooter(props: QuizFooterProps) {
   const { previousButtonEnabled, nextButtonEnabled, onPreviousPage, onNextPage, onReset } = props;
-
-  useHotkeys('a', () => onPreviousPage(), { filterPreventDefault: false });
-  useHotkeys('d', () => alert('test'), { filterPreventDefault: false });
 
   return (
     <div className="tw-border-t tw-border-jansen-purple tw-px-10 tw-py-5 tw-flex tw-gap-3 tw-justify-between">

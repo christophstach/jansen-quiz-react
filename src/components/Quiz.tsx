@@ -22,7 +22,7 @@ import {
   isLastQuestionOfCurrentCategoryAtom,
 } from '../atoms/derived/questions';
 import { mailFormAtom } from '../atoms/mailForm';
-import { pagesAtom } from '../atoms/pages';
+import { finalQuestionPageAtom, pagesAtom } from '../atoms/pages';
 
 import { questionsAtom } from '../atoms/questions';
 import { config } from '../config';
@@ -36,7 +36,7 @@ import MultipleChoiceQuestionPage from './pages/MultipleChoiceQuestionPage';
 import SimpleQuestionPage from './pages/SimpleQuestionsPage';
 
 import { QuizFooter } from './QuizFooter';
-import { Rootline } from './Rootline';
+import { ProgressBar } from './ProgressBar';
 
 export default function Quiz() {
   const [currentCategory, setCurrentCategory] = useAtom(currentCategoryAtom);
@@ -49,6 +49,7 @@ export default function Quiz() {
   const [nextCategory, setNextCategory] = useAtom(nextCategoryAtom);
   const [mailForm, setMailForm] = useAtom(mailFormAtom);
   const [pages, setPages] = useAtom(pagesAtom);
+  const [finalQuestionPage, setFinalQuestionPage] = useAtom(finalQuestionPageAtom);
 
   const setCurrentCategorySelectedSubCategoryId = useSetAtom(currentCategorySelectedSubCategoryIdAtom);
 
@@ -83,7 +84,6 @@ export default function Quiz() {
           const pageCurrentCategory = findById(categories, previousPage.currentCategoryId)!;
           setCurrentCategory(pageCurrentCategory);
         }
-
         break;
       case PageType.SimpleQuestion:
       case PageType.MultipleChoiceQuestion:
@@ -124,6 +124,12 @@ export default function Quiz() {
           }
         }
         break;
+      case PageType.FinalSimpleQuestion:
+      case PageType.FinalMultipleChoiceQuestion:
+        {
+          setFinalQuestionPage(finalQuestionPage - 1);
+        }
+        break;
       case PageType.FinalizeCategory:
         {
           const pageCurrentCategory = findById(categories, previousPage.currentCategoryId)!;
@@ -151,69 +157,91 @@ export default function Quiz() {
   async function handleNextPage(): Promise<void> {
     switch (pageType) {
       case PageType.Category:
-        setPages([
-          ...pages,
-          {
-            type: pageType,
-            currentCategoryId: currentCategory.id,
-          },
-        ]);
+        {
+          setPages([
+            ...pages,
+            {
+              type: pageType,
+              currentCategoryId: currentCategory.id,
+            },
+          ]);
 
-        setCurrentCategory((await selectedSubCategoryCallback())!);
-        setCurrentCategorySelectedSubCategoryId(undefined);
+          setCurrentCategory((await selectedSubCategoryCallback())!);
+          setCurrentCategorySelectedSubCategoryId(undefined);
+        }
         break;
 
       case PageType.SimpleQuestion:
       case PageType.MultipleChoiceQuestion:
-        setPages([
-          ...pages,
-          {
-            type: pageType,
-            currentQuestionId: currentQuestion!.id,
-          },
-        ]);
+        {
+          setPages([
+            ...pages,
+            {
+              type: pageType,
+              currentQuestionId: currentQuestion!.id,
+            },
+          ]);
 
-        setCurrentCategoryPage(currentCategoryPage! + 1);
+          setCurrentCategoryPage(currentCategoryPage! + 1);
 
-        if (isLastQuestionOfCurrentCategory) {
-          setParentCategory({
-            ...parentCategory!,
-            finalizedSubCategories: parentCategory!.finalizedSubCategories
-              ? [...parentCategory!.finalizedSubCategories, currentCategory!.id]
-              : [currentCategory!.id],
-          });
+          if (isLastQuestionOfCurrentCategory) {
+            setParentCategory({
+              ...parentCategory!,
+              finalizedSubCategories: parentCategory!.finalizedSubCategories
+                ? [...parentCategory!.finalizedSubCategories, currentCategory!.id]
+                : [currentCategory!.id],
+            });
+          }
         }
         break;
 
+      case PageType.FinalSimpleQuestion:
+      case PageType.FinalMultipleChoiceQuestion:
+        {
+          setPages([
+            ...pages,
+            {
+              type: pageType,
+            },
+          ]);
+
+          setFinalQuestionPage(finalQuestionPage + 1);
+        }
+        break;
       case PageType.FinalizeCategory:
-        const nextCategory = await nextCategoryCallback();
+        {
+          const nextCategory = await nextCategoryCallback();
 
-        setPages([
-          ...pages,
-          {
-            type: pageType,
-            currentCategoryId: currentCategory!.id,
-            nextCategoryId: nextCategory!.id,
-          },
-        ]);
+          setPages([
+            ...pages,
+            {
+              type: pageType,
+              currentCategoryId: currentCategory!.id,
+              nextCategoryId: nextCategory!.id,
+            },
+          ]);
 
-        if (nextCategory?.hasInterest) {
-          setCurrentCategory(nextCategory);
-        } else {
-          setParentCategory({
-            ...parentCategory!,
-            finalizedSubCategories: parentCategory!.finalizedSubCategories
-              ? [...parentCategory!.finalizedSubCategories, nextCategory!.id]
-              : [nextCategory!.id],
-          });
+          if (nextCategory?.hasInterest) {
+            setCurrentCategory(nextCategory);
+          } else {
+            setParentCategory({
+              ...parentCategory!,
+              finalizedSubCategories: parentCategory!.finalizedSubCategories
+                ? [...parentCategory!.finalizedSubCategories, nextCategory!.id]
+                : [nextCategory!.id],
+            });
+          }
         }
         break;
 
       case PageType.MailForm:
+        {
+        }
         break;
 
-      default:
+      default: {
         alert('Not valid PageType!');
+      }
     }
   }
 
@@ -222,6 +250,7 @@ export default function Quiz() {
       setCategories(RESET);
       setQuestions(RESET);
       setPages(RESET);
+      setFinalQuestionPage(RESET);
       setMailForm(RESET);
     }
   }
@@ -285,6 +314,7 @@ export default function Quiz() {
         setCategories(RESET);
         setQuestions(RESET);
         setPages(RESET);
+        setFinalQuestionPage(RESET);
         setMailForm(RESET);
 
         window.location.replace(recommendationsLink);
@@ -312,7 +342,23 @@ export default function Quiz() {
         onAnswerSelected={handleAnswerSelected}
       />
     ),
+    [PageType.FinalSimpleQuestion]: (
+      <SimpleQuestionPage
+        question={currentQuestion!}
+        answers={currentQuestionAnswers}
+        selectedAnswerId={currentQuestionSelectedAnswerId}
+        onAnswerSelected={handleAnswerSelected}
+      />
+    ),
     [PageType.MultipleChoiceQuestion]: (
+      <MultipleChoiceQuestionPage
+        question={currentQuestion!}
+        answers={currentQuestionAnswers}
+        selectedAnswerIds={currentQuestionSelectedAnswerIds}
+        onAnswersSelected={handleAnswersSelected}
+      />
+    ),
+    [PageType.FinalMultipleChoiceQuestion]: (
       <MultipleChoiceQuestionPage
         question={currentQuestion!}
         answers={currentQuestionAnswers}
@@ -375,7 +421,7 @@ export default function Quiz() {
           <>
             {currentCategory.parentId && (
               <div className="tw-p-10">
-                <Rootline page={page} maxPages={maxPages} />
+                <ProgressBar page={page} maxPages={maxPages} />
               </div>
             )}
 
