@@ -154,11 +154,11 @@ export default function Quiz() {
       }
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
   async function handleNextPage(): Promise<void> {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
 
     switch (pageType) {
       case PageType.Category:
@@ -249,7 +249,7 @@ export default function Quiz() {
       }
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
   function handleResetQuiz(): void {
