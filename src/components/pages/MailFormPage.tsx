@@ -31,8 +31,8 @@ export function MailFormPage(props: MailFormPageProps) {
   }
 
   return (
-    <form className="tw-p-10" onSubmit={handleSubmit}>
-      <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
+    <form onSubmit={handleSubmit}>
+      <h1 className="tw-text-jansen-purple tw-font-bold tw-text-md md:tw-text-2xl tw-text-center tw-mb-5 ">
         Fast geschafft! Wohin soll ich dir deine Auswertung inklusive 6-Wochen-Finanzplan schicken?
       </h1>
 
@@ -73,7 +73,7 @@ export function MailFormPage(props: MailFormPageProps) {
 
       <div>
         <button
-          className="tw-bg-jansen-purple tw-text-jansen-yellow disabled:tw-bg-gray-500 tw-w-full tw-p-5 tw-text-2xl tw-flex tw-gap-3 tw-items-center tw-justify-center"
+          className="tw-bg-jansen-yellow tw-text-jansen-purple disabled:tw-bg-gray-500 tw-w-full tw-p-5 tw-text-2xl tw-flex tw-gap-3 tw-items-center tw-justify-center"
           type="submit"
           disabled={loading}
         >

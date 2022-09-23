@@ -1,8 +1,9 @@
 import { atom } from 'jotai';
-import { PageType, QuestionType } from '../../types';
+import { FinalizeCategoryPage, PageType, QuestionType } from '../../types';
 import { categoriesAtom } from '../categories';
 import { isQuestionValid } from '../helpers';
 import { finalQuestionPageAtom, pagesAtom } from '../pages';
+import { questionsAtom } from '../questions';
 import {
   currentCategoryAtom,
   currentCategoryPageAtom,
@@ -13,36 +14,33 @@ import {
 } from './categories';
 import { currentCategoryQuestionsAtom, currentQuestionAtom, finalQuestionsAtom } from './questions';
 
-export const pageAtom = atom((get) => {
+export const maxPagesAtom = atom((get) => {
+  const questions = get(questionsAtom);
   const pages = get(pagesAtom);
-  const pageType = get(pageTypeAtom);
-  const categories = get(categoriesAtom);
-  const currentCategory = get(currentCategoryAtom);
+  const addtionalPages = pages.filter((page) => page.type === PageType.Category);
 
-  if (pageType === PageType.Category) {
-    return -1;
-  } else if (pageType === PageType.FinalizeCategory) {
-    return -2;
-  } else if (pageType === PageType.MailForm) {
-    return -3;
-  } else if (pageType === PageType.Error) {
-    return -4;
-  } else if (pageType === PageType.SimpleQuestion || pageType === PageType.MultipleChoiceQuestion) {
-    return currentCategory.page ? currentCategory.page : 0;
-  }
-
-  return -4;
+  return questions.length + addtionalPages.length
 });
 
-export const maxPagesAtom = atom((get) => {
-  const currentCategoryQuestions = get(currentCategoryQuestionsAtom);
 
-  return currentCategoryQuestions.length;
+export const pageAtom = atom((get) => {
+  const questions = get(questionsAtom);
+  const categories = get(categoriesAtom);
+  const pages = get(pagesAtom);
+  const finalizeCategoryPageIds = pages.filter((page) => page.type === PageType.FinalizeCategory).map((page) => (page as FinalizeCategoryPage).nextCategoryId);
+  const skippedCategoryIds = categories
+    .filter((category) => finalizeCategoryPageIds.includes(category.id))
+    .filter((category) => category.hasInterest === false)
+    .map((category) => category.id);
+
+  const skippedQuestions = questions.filter((question) => question.categoryId && skippedCategoryIds.includes(question.categoryId));
+
+  return pages.length + skippedQuestions.length;
 });
 
 export const canGoPreviousPageAtom = atom((get) => {
   const pages = get(pagesAtom);
-
+  
   return pages.length > 0;
 });
 

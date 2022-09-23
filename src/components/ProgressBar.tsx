@@ -1,3 +1,5 @@
+import { PageType } from '../types';
+
 export type ProgessBarProps = {
   page: number;
   maxPages: number;
@@ -5,19 +7,7 @@ export type ProgessBarProps = {
 
 export function ProgressBar(props: ProgessBarProps) {
   const { page, maxPages } = props;
-  let percent: number;
-
-  if (page === -1) {
-    percent = 5;
-  } else if (page === -2) {
-    percent = 85;
-  } else if (page === -3) {
-    percent = 95;
-  } else if (page === -4) {
-    percent = 0;
-  } else {
-    percent = Math.max(Math.min(Math.round((page / maxPages) * 100), 84), 10);
-  }
+  const percent = page / maxPages * 100;
 
   return (
     <div className="tw-w-full tw-bg-gray-200 tw-rounded-full">

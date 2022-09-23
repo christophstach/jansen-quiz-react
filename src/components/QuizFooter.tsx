@@ -14,23 +14,24 @@ export function QuizFooter(props: QuizFooterProps) {
     <div className="tw-border-t tw-border-jansen-purple tw-px-10 tw-py-5 tw-flex tw-gap-3 tw-justify-between">
       <div>
         <button
-          className="tw-text-white tw-bg-jansen-yellow tw-p-2 disabled:tw-bg-gray-500"
+          className="tw-text-white tw-p-2 tw-px-5 tw-bg-gray-500 tw-h-full"
           onClick={onPreviousPage}
           disabled={!previousButtonEnabled}
         >
-          Zurück
+          «
         </button>
       </div>
 
-      <div>
-        <button className="tw-text-white tw-p-2 tw-bg-gray-500" onClick={onReset}>
+      
+      {/*<div>
+        <button className="tw-text-white tw-p-2 tw-bg-gray-500 tw-h-full" onClick={onReset}>
           Neu beginnen
         </button>
-      </div>
+      </div>*/}
 
       <div className="tw-flex-1 tw-text-right">
         <button
-          className="tw-text-white tw-bg-jansen-yellow tw-p-2 disabled:tw-bg-gray-500"
+          className="tw-text-white tw-bg-jansen-yellow tw-p-2 tw-h-full tw-w-full"
           onClick={onNextPage}
           disabled={!nextButtonEnabled}
         >

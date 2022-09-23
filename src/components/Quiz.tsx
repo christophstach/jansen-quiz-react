@@ -14,7 +14,7 @@ import {
 } from '../atoms/derived/categories';
 import { payloadAtom } from '../atoms/derived/data';
 
-import { canGoNextPageAtom, canGoPreviousPageAtom, maxPagesAtom, pageAtom, pageTypeAtom } from '../atoms/derived/pages';
+import { canGoNextPageAtom, canGoPreviousPageAtom, maxPagesAtom, pageTypeAtom, pageAtom } from '../atoms/derived/pages';
 import {
   currentQuestionAtom,
   currentQuestionSelectedAnwerIdAtom,
@@ -37,6 +37,7 @@ import SimpleQuestionPage from './pages/SimpleQuestionsPage';
 
 import { QuizFooter } from './QuizFooter';
 import { ProgressBar } from './ProgressBar';
+import { PageIndicator } from './PageIndicator';
 
 export default function Quiz() {
   const [currentCategory, setCurrentCategory] = useAtom(currentCategoryAtom);
@@ -152,9 +153,13 @@ export default function Quiz() {
         alert('Not a valid PageType!');
       }
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleNextPage(): Promise<void> {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     switch (pageType) {
       case PageType.Category:
         {
@@ -243,6 +248,8 @@ export default function Quiz() {
         alert('Not valid PageType!');
       }
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function handleResetQuiz(): void {
@@ -387,47 +394,33 @@ export default function Quiz() {
   };
 
   return (
-    <div className="tw-p-10 tw-min-h-full">
+    <div className="tw-min-h-full">
       <div className="tw-shadow-quiz tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
         <div className="tw-flex tw-justify-between tw-pt-3">
           <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">
-            {page === -1 && <>Start</>}
-
-            {page === -2 && <>Fast geschafft</>}
-
-            {page === -3 && <>Ziel</>}
-
-            {page === -4 && <>Fehler</>}
-
-            {page >= 0 && (
-              <>
-                Schritt {page + 1} / {maxPages}
-              </>
-            )}
+            <PageIndicator pages={pages} />
           </div>
 
-          <div className="tw-bg-jansen-yellow tw-text-white tw-p-3 -tw-mr-3">Zu 100% für 0 Euro</div>
+          <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-mr-3 ">Zu 100% für 0 Euro</div>
         </div>
 
         {emailSent ? (
-          <div className="tw-pb-10 tw-px-10">
-            <div className="tw-p-10">
+          <div className="tw-p-5 md:tw-p-10">
               <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
                 Deine Auswertung ist auf dem Weg. Du wirst weitergeleitet...
               </h1>
-            </div>
           </div>
         ) : (
           <>
             {currentCategory.parentId && (
-              <div className="tw-p-10">
+              <div className="tw-px-5 tw-pt-5 md:tw-px-10 md:tw-pt-10">
                 <ProgressBar page={page} maxPages={maxPages} />
               </div>
             )}
 
-            <div className="tw-pb-10 tw-px-10">{pageTypes[pageType]}</div>
+            <div className="tw-p-5 md:tw-p-10">{pageTypes[pageType]}</div>
 
-            {currentCategory.parentId && (
+            {currentCategory.parentId && pageType !== PageType.MailForm &&  (
               <QuizFooter
                 previousButtonEnabled={canGoPreviousPage}
                 nextButtonEnabled={canGoNextPage}

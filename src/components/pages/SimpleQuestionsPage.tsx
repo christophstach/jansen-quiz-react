@@ -19,7 +19,7 @@ export default function SimpleQuestionPage(props: SimpleQuestionPageProps) {
           </div>
         )}
 
-        <h1 className="tw-flex-1 tw-text-jansen-purple tw-font-bold tw-text-lg tw-text-center">{question.text}</h1>
+        <h1 className="tw-flex-1 tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">{question.text}</h1>
       </div>
 
       {answers.map((answer) => (

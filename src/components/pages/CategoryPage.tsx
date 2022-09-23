@@ -23,7 +23,7 @@ export function CategoryPage(props: CategoryPageProps) {
           </div>
         )}
 
-        <h1 className="tw-flex-1 tw-text-jansen-purple tw-font-bold tw-text-lg tw-text-center">{category.text}</h1>
+        <h1 className="tw-flex-1 tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">{category.text}</h1>
       </div>
 
       {subCategories.map((subCategory) => (
@@ -59,24 +59,29 @@ export function CategoryPage(props: CategoryPageProps) {
                 </div>
                 <div>
                   <p>
-                    Ich bin Andreas, Finanzexperte, Autor des Quizzes und dein Begleiter durchs Quiz. Das Ziel des
-                    Quizzes ist es deine persönlichen Finanzlücken und Potenzial zu finden. Fülle den Test
-                    wahrheitsgemäßg aus und entscheide dich bei offenen Fragen spontan.
+                    Ich bin Andreas Jansen, Finanzexperte, Autor des Finanz-Checks und dein Begleiter durch den Check.
+                    Das Ziel des Finanz-Checks ist es <strong>deine persönlichen Finanzlücken</strong> und <strong>Finanz-Potenziale</strong> zu finden und dir <strong>konkrete Handlungsoptionen</strong> vorzuschlagen,
+                    mit denen du direkt <strong>Geld sparst</strong>, <strong>besser abgesichert</strong> bist und <strong>cleverer investierst</strong>. 
                   </p>
                 </div>
               </div>
 
               <p className="tw-py-2 tw-text-xs tw-text-jansen-gray">
-                Im Rahmen des Finanz-Quizzes werden deine angegeben personenbezogen Daten gemäß der Datenschutzerklärung
-                verarbeitet, um dir ein aussagekräftes Ergebnis zu liefern.
+                Im Rahmen des Finanz-Checks werden deine angegeben personenbezogenen Daten gemäß der <a className="tw-underline" href="https://andreasjansen.com/datenschutz/" target="_blank">Datenschutzerklärung</a> verarbeitet, um dir ein aussagekräftiges Ergebnis zu liefern. Bist du bereit loszulegen? 
               </p>
 
               <button
-                className="tw-cursor-pointer tw-border-jansen-purple tw-bg-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-yellow tw-text-center tw-w-full tw-font-bold tw-uppercase tw-text-xl"
+                className="tw-cursor-pointer tw-border-jansen-purple tw-bg-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-yellow tw-text-center tw-w-full tw-font-bold tw-text-xl"
                 onClick={() => handleSubCategorySelected(subCategory.id)}
               >
-                {subCategory.title}
+                Alles klar! Los geht's
               </button>
+
+              <div className="tw-mt-5 tw-flex tw-justify-center tw-flex-col md:tw-flex-row tw-items-center tw-gap-2 md:tw-gap-10">
+                <div>✔️ Sofort-Auswertung in 3 Min! </div>
+                <div>✔️ Entdecke deine Potenziale! </div>
+                <div>✔️ 6-Wochen-Finanz-Fahrplan </div>
+              </div>
             </>
           )}
         </div>

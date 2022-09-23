@@ -198,13 +198,6 @@ const questions: Question[] = [
     text: 'Wie würdest du am liebsten weiter dein Finanzwissen aufbauen?',
     type: QuestionType.MultipleChoice,
   },
-
-  {
-    categoryId: null,
-    id: '30',
-    text: 'Bist du interessiert an einem per­sön­lich Coaching mit mir?',
-    type: QuestionType.Simple,
-  },
 ];
 
 export const questionsAtom = atomWithStorage('questionsAtom', questions);

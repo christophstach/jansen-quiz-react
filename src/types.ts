@@ -3,6 +3,7 @@ export type Category = {
   icon?: string;
   active?: boolean;
   title?: string;
+  finalizeCategoryText?: string;
   text?: string;
   parentId?: string;
   page?: number;
