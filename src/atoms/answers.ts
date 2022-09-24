@@ -2,24 +2,6 @@ import { atom } from 'jotai';
 import { Answer } from '../types';
 
 const answers: Answer[] = [
-  {
-    id: '22',
-    text: 'Meine Ausgaben senken',
-    questionId: '2',
-  },
-
-  {
-    id: '23',
-    text: 'Mein Vermögen oder Altersvorsorge aufbauen',
-    questionId: '2',
-  },
-
-  {
-    id: '24',
-    text: 'Absicherung für mich und meine Familie',
-    questionId: '2',
-  },
-
   { id: '31', text: 'Ja', questionId: '3' },
 
   { id: '32', text: 'Nein', questionId: '3' },

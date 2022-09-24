@@ -3,13 +3,6 @@ import { Question, QuestionType } from '../types';
 
 const questions: Question[] = [
   {
-    categoryId: '1',
-    id: '2',
-    text: 'Welches dieser Ziele steht bei dir im Fokus?',
-    type: QuestionType.Simple,
-  },
-
-  {
     categoryId: '1.1',
     id: '3',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/09/Verteilung.png',
