@@ -395,7 +395,7 @@ export default function Quiz() {
 
   return (
     <div className="tw-min-h-full">
-      <div className="tw-shadow-quiz tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
+      <div className="tw-shadow-quiz tw-bg-slate-200 tw-flex tw-flex-col tw-max-w-[960px] tw-mx-auto">
         <div className="tw-flex tw-justify-between tw-pt-3">
           <div className="tw-bg-jansen-purple tw-text-white tw-p-3 -tw-ml-3">
             <PageIndicator pages={pages} />
