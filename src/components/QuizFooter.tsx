@@ -31,7 +31,7 @@ export function QuizFooter(props: QuizFooterProps) {
 
       <div className="tw-flex-1 tw-text-right">
         <button
-          className="tw-text-white tw-bg-jansen-yellow tw-p-2 tw-h-full tw-w-full"
+          className="tw-text-jansen-purple tw-bg-jansen-yellow tw-p-2 tw-h-full tw-w-full"
           onClick={onNextPage}
           disabled={!nextButtonEnabled}
         >
