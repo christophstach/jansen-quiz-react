@@ -22,7 +22,7 @@ const answers: Answer[] = [
 
   {
     id: '51',
-    text: 'Ich wohne zur Untermiete in einer WG oder Wohung',
+    text: 'Ich wohne zur Untermiete in einer WG oder Wohnung',
     questionId: '5',
   },
 
