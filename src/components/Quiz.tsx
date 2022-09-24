@@ -407,7 +407,7 @@ export default function Quiz() {
         {emailSent ? (
           <div className="tw-p-5 md:tw-p-10">
               <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
-                Deine Auswertung ist auf dem Weg. Du wirst weitergeleitet...
+                Dein Resultat wird berechnet. Du wirst weitergeleitet...
               </h1>
           </div>
         ) : (
