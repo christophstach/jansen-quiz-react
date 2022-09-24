@@ -71,7 +71,7 @@ export function CategoryPage(props: CategoryPageProps) {
               </p>
 
               <button
-                className="tw-cursor-pointer tw-border-jansen-purple tw-bg-jansen-purple tw-border tw-my-5 tw-p-5 tw-text-jansen-yellow tw-text-center tw-w-full tw-font-bold tw-text-xl"
+                className="tw-cursor-pointer tw-border-jansen-yellow tw-bg-jansen-yellow tw-border tw-my-5 tw-p-5 tw-text-jansen-purple tw-text-center tw-w-full tw-font-bold tw-text-xl"
                 onClick={() => handleSubCategorySelected(subCategory.id)}
               >
                 Alles klar! Los geht's
@@ -80,7 +80,7 @@ export function CategoryPage(props: CategoryPageProps) {
               <div className="tw-mt-5 tw-flex tw-justify-center tw-flex-col md:tw-flex-row tw-items-center tw-gap-2 md:tw-gap-10">
                 <div>✔️ Sofort-Auswertung in 3 Min! </div>
                 <div>✔️ Entdecke deine Potenziale! </div>
-                <div>✔️ 6-Wochen-Finanz-Fahrplan </div>
+                <div>✔️ 6-Wochen-Finanz-Fahrplan als PDF! </div>
               </div>
             </>
           )}
