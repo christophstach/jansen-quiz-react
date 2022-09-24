@@ -5,7 +5,7 @@ const questions: Question[] = [
   {
     categoryId: '1.1',
     id: '3',
-    icon: 'https://andreasjansen.com/wp-content/uploads/2022/09/Verteilung.png',
+    icon: 'https://andreasjansen.com/wp-content/uploads/2022/09/10.png',
     text: 'Hast du einen Überblick über deine monatlichen Einnahmen und Ausgaben?',
     type: QuestionType.Simple,
   },
