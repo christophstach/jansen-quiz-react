@@ -74,7 +74,7 @@ const questions: Question[] = [
   },
 
   {
-    categoryId: '1',
+    categoryId: '1.1',
     id: '12',
     text: 'Hast du ein privates Auto?',
     type: QuestionType.Simple,
@@ -111,7 +111,7 @@ const questions: Question[] = [
   {
     categoryId: '1.2',
     id: '17',
-    text: 'Hast du bereit eine Notfallreserve von mehr als 3 Monatsgehälter aufgebaut?',
+    text: 'Hast du bereits eine Notfallreserve von mehr als 3 Monatsgehälter aufgebaut?',
     type: QuestionType.Simple,
   },
 

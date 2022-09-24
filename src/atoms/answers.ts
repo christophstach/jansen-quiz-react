@@ -36,6 +36,8 @@ const answers: Answer[] = [
 
   { id: '43', text: 'Handy', questionId: '4' },
 
+  { id: '44', text: 'Ich habe keine Verträge gewechselt', questionId: '4' },
+
   {
     id: '51',
     text: 'Ich wohne zur Untermiete in einer WG oder Wohung',
@@ -136,8 +138,6 @@ const answers: Answer[] = [
 
   { id: '122', text: 'Nein', questionId: '12' },
 
-  { id: '123', text: '', questionId: '12' },
-
   { id: '131', text: 'HKK, BKK, IKK, Techniker', questionId: '13' },
 
   {
@@ -165,6 +165,12 @@ const answers: Answer[] = [
   {
     id: '152',
     text: 'Ja, ich handel über Flatex, comdirect, onvista, DKB, Consors oder ING',
+    questionId: '15',
+  },
+
+  {
+    id: '153',
+    text: 'Ich habe kein Aktiendepot',
     questionId: '15',
   },
 
@@ -298,6 +304,8 @@ const answers: Answer[] = [
 
   { id: '256', text: 'Risikolebensversicherung', questionId: '25' },
 
+  { id: '257', text: 'Keine der Versicherungen', questionId: '25' },
+
   { id: '261', text: 'Nein', questionId: '26' },
 
   {
@@ -345,6 +353,8 @@ const answers: Answer[] = [
   { id: '296', text: 'Bücher', questionId: '29' },
 
   { id: '297', text: 'Podcast', questionId: '29' },
+
+  { id: '298', text: 'Ich will nichts lernen', questionId: '29' },
 
   { id: '301', text: 'Ja', questionId: '30' },
   { id: '302', text: 'Nein', questionId: '30' },
