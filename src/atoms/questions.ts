@@ -29,7 +29,6 @@ const questions: Question[] = [
   {
     categoryId: '1.1',
     id: '6',
-    icon: 'https://andreasjansen.com/wp-content/uploads/2022/03/Banking2.png',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/03/Ordner.png',
     text: 'Wie beschäftigst du dich mit deiner Steuererklärung?',
     type: QuestionType.Simple,
