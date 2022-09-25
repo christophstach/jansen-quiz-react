@@ -10,7 +10,7 @@ const categories: Category[] = [
 
   {
     id: '1',
-    title: 'Alles klar! Los geht\'s',
+    title: "Alles klar! Los geht's",
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/03/Target.png',
     text: 'Welches dieser Ziele steht bei dir im Fokus?',
     parentId: '0',

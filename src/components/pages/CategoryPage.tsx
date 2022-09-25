@@ -60,14 +60,20 @@ export function CategoryPage(props: CategoryPageProps) {
                 <div>
                   <p>
                     Ich bin Andreas Jansen, Finanzexperte, Autor des Finanz-Checks und dein Begleiter durch den Check.
-                    Das Ziel des Finanz-Checks ist es <strong>deine persönlichen Finanzlücken</strong> und <strong>Finanz-Potenziale</strong> zu finden und dir <strong>konkrete Handlungsoptionen</strong> vorzuschlagen,
-                    mit denen du direkt <strong>Geld sparst</strong>, <strong>besser abgesichert</strong> bist und <strong>cleverer investierst</strong>. 
+                    Das Ziel des Finanz-Checks ist es <strong>deine persönlichen Finanzlücken</strong> und{' '}
+                    <strong>Finanz-Potenziale</strong> zu finden und dir <strong>konkrete Handlungsoptionen</strong>{' '}
+                    vorzuschlagen, mit denen du direkt <strong>Geld sparst</strong>, <strong>besser abgesichert</strong>{' '}
+                    bist und <strong>cleverer investierst</strong>.
                   </p>
                 </div>
               </div>
 
               <p className="tw-py-2 tw-text-xs tw-text-jansen-gray">
-                Im Rahmen des Finanz-Checks werden deine angegeben personenbezogenen Daten gemäß der <a className="tw-underline" href="https://andreasjansen.com/datenschutz/" target="_blank">Datenschutzerklärung</a> verarbeitet, um dir ein aussagekräftiges Ergebnis zu liefern. Bist du bereit loszulegen? 
+                Im Rahmen des Finanz-Checks werden deine angegeben personenbezogenen Daten gemäß der{' '}
+                <a className="tw-underline" href="https://andreasjansen.com/datenschutz/" target="_blank">
+                  Datenschutzerklärung
+                </a>{' '}
+                verarbeitet, um dir ein aussagekräftiges Ergebnis zu liefern. Bist du bereit loszulegen?
               </p>
 
               <button

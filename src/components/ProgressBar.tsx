@@ -7,7 +7,7 @@ export type ProgessBarProps = {
 
 export function ProgressBar(props: ProgessBarProps) {
   const { page, maxPages } = props;
-  const percent = page / maxPages * 100;
+  const percent = (page / maxPages) * 100;
 
   return (
     <div className="tw-w-full tw-bg-gray-200 tw-rounded-full">

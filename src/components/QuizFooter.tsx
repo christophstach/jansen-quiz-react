@@ -22,7 +22,6 @@ export function QuizFooter(props: QuizFooterProps) {
         </button>
       </div>
 
-      
       {/*<div>
         <button className="tw-text-white tw-p-2 tw-bg-gray-500 tw-h-full" onClick={onReset}>
           Neu beginnen

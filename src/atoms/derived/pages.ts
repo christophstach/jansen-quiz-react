@@ -19,28 +19,31 @@ export const maxPagesAtom = atom((get) => {
   const pages = get(pagesAtom);
   const addtionalPages = pages.filter((page) => page.type === PageType.Category);
 
-  return questions.length + addtionalPages.length
+  return questions.length + addtionalPages.length;
 });
-
 
 export const pageAtom = atom((get) => {
   const questions = get(questionsAtom);
   const categories = get(categoriesAtom);
   const pages = get(pagesAtom);
-  const finalizeCategoryPageIds = pages.filter((page) => page.type === PageType.FinalizeCategory).map((page) => (page as FinalizeCategoryPage).nextCategoryId);
+  const finalizeCategoryPageIds = pages
+    .filter((page) => page.type === PageType.FinalizeCategory)
+    .map((page) => (page as FinalizeCategoryPage).nextCategoryId);
   const skippedCategoryIds = categories
     .filter((category) => finalizeCategoryPageIds.includes(category.id))
     .filter((category) => category.hasInterest === false)
     .map((category) => category.id);
 
-  const skippedQuestions = questions.filter((question) => question.categoryId && skippedCategoryIds.includes(question.categoryId));
+  const skippedQuestions = questions.filter(
+    (question) => question.categoryId && skippedCategoryIds.includes(question.categoryId)
+  );
 
   return pages.length + skippedQuestions.length;
 });
 
 export const canGoPreviousPageAtom = atom((get) => {
   const pages = get(pagesAtom);
-  
+
   return pages.length > 0;
 });
 

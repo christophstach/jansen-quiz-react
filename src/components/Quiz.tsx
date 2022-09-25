@@ -158,8 +158,6 @@ export default function Quiz() {
   }
 
   async function handleNextPage(): Promise<void> {
-
-
     switch (pageType) {
       case PageType.Category:
         {
@@ -406,9 +404,9 @@ export default function Quiz() {
 
         {emailSent ? (
           <div className="tw-p-5 md:tw-p-10">
-              <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
-                Dein Resultat wird berechnet. Du wirst weitergeleitet...
-              </h1>
+            <h1 className="tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
+              Dein Resultat wird berechnet. Du wirst weitergeleitet...
+            </h1>
           </div>
         ) : (
           <>
@@ -420,7 +418,7 @@ export default function Quiz() {
 
             <div className="tw-p-5 md:tw-p-10">{pageTypes[pageType]}</div>
 
-            {currentCategory.parentId && pageType !== PageType.MailForm &&  (
+            {currentCategory.parentId && pageType !== PageType.MailForm && (
               <QuizFooter
                 previousButtonEnabled={canGoPreviousPage}
                 nextButtonEnabled={canGoNextPage}

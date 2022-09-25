@@ -13,7 +13,6 @@ export function FinalizeCategoryPage(props: FinalizeCategoryPageProps) {
     <>
       <div className="tw-flex tw-items-center tw-mb-10">
         <h1 className="tw-flex-1 tw-text-jansen-purple tw-font-bold tw-text-2xl tw-text-center">
-          
           {nextCategory.finalizeCategoryText}
         </h1>
       </div>
