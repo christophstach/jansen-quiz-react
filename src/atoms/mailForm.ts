@@ -1,3 +1,3 @@
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
-export const mailFormAtom = atomWithStorage('mailFormAtom', { firstName: '', email: '' });
+export const mailFormAtom = atomWithStorage('mailFormAtom', { firstName: '', email: '' }, createJSONStorage(() => sessionStorage));

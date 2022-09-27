@@ -1,4 +1,4 @@
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { Question, QuestionType } from '../types';
 
 const questions: Question[] = [
@@ -219,4 +219,4 @@ const questions: Question[] = [
   },
 ];
 
-export const questionsAtom = atomWithStorage('questionsAtom', questions);
+export const questionsAtom = atomWithStorage('questionsAtom', questions, createJSONStorage(() => sessionStorage));

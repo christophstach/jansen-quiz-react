@@ -1,4 +1,4 @@
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { Category } from '../types';
 
 const categories: Category[] = [
@@ -39,4 +39,4 @@ const categories: Category[] = [
   },
 ];
 
-export const categoriesAtom = atomWithStorage('categoriesAtom', categories);
+export const categoriesAtom = atomWithStorage('categoriesAtom', categories, createJSONStorage(() => sessionStorage));

@@ -304,6 +304,8 @@ export default function Quiz() {
       recommendationsLink,
     });
 
+    console.log((recommendationsLink.replace('https://andreasjansen.com/resultat/?e=', '')));
+
     fetch(config.subscribeUrl, {
       method: 'POST',
       body: json,
