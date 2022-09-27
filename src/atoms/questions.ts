@@ -166,7 +166,7 @@ const questions: Question[] = [
     categoryId: '1.2',
     id: '23',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/03/Altersvorsorge.png',
-    text: 'Möchtest du deinen Vermögensaufbau komplett selbstständig angehen oder Dinge abgeben?',
+    text: 'Möchtest du deinen Vermögensaufbau komplett selbstständig angehen oder hast du keine Lust dich damit auseinanderzusetzen?',
     type: QuestionType.Simple,
   },
 
