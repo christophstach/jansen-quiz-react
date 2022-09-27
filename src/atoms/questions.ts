@@ -219,4 +219,8 @@ const questions: Question[] = [
   },
 ];
 
-export const questionsAtom = atomWithStorage('questionsAtom', questions, createJSONStorage(() => sessionStorage));
+export const questionsAtom = atomWithStorage(
+  'questionsAtom',
+  questions,
+  createJSONStorage(() => sessionStorage)
+);
