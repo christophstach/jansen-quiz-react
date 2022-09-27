@@ -166,7 +166,7 @@ const questions: Question[] = [
     categoryId: '1.2',
     id: '23',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/03/Altersvorsorge.png',
-    text: 'Möchtest du deinen Vermögensaufbau komplett selbstständig angehen oder hast du keine Lust dich damit auseinanderzusetzen?',
+    text: 'Möchtest du deinen Vermögensaufbau komplett selbstständig angehen oder würdest du die Planung und Organsiation zum Teil anderen überlassen?',
     type: QuestionType.Simple,
   },
 
@@ -206,7 +206,7 @@ const questions: Question[] = [
     categoryId: '1.3',
     id: '28',
     icon: 'https://andreasjansen.com/wp-content/uploads/2022/09/13.png',
-    text: 'Hast du dich schon einmal mit deinen Glaubensätzen, die dich an erfolgreichen Finanzen hindern können, auseinander gesetzt?',
+    text: 'Hast du schon einmal mit deinen negativen Glaubensätzen, die dich an erfolgreichen Finanzen hindern können, auseinander gesetzt?',
     type: QuestionType.Simple,
   },
 
