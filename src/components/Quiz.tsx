@@ -322,7 +322,7 @@ export default function Quiz() {
         setFinalQuestionPage(RESET);
         setMailForm(RESET);
 
-        window.location.replace(recommendationsLink);
+        window.location.replace(config.forwardlink);
       })
       .catch(() => {
         setLoading(false);
